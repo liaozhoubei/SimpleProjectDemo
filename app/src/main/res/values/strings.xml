@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Weather</string>
+    <string name="input_text">请输入城市拼音</string>
+    <string name="error_network_connect">网络连接失败</string>
+    <string name="getting_update">更新中</string>
+    <string name="warning">请输入正确的城市拼音，输入错误会导致程序闪退</string>
+    <string name="get_erro_city">没有找到您输入的城市信息</string>
+
+</resources>
