@@ -1,6 +1,7 @@
 package com.example.mobilesafe;
 
 import com.example.mobilesafe.adapter.GvAdapter;
+import com.example.mobilesafe.utils.MD5Util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,6 +18,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -84,7 +86,7 @@ public class MainActivity extends Activity {
 						if (password.equals(confirm_password)){
 							// keep the password to sharedPerferences
 							Editor edit = sp.edit();
-							edit.putString("password", password);
+							edit.putString("password", MD5Util.passwordMD5(password));
 							edit.apply();
 							Toast.makeText(getApplicationContext(), "密码设置成功", Toast.LENGTH_SHORT).show();
 							dialog.dismiss();
@@ -109,6 +111,8 @@ public class MainActivity extends Activity {
 				dialog.show();
 				
 			}
+			
+			int count = 0;
 			// show dialog to enter password
 			private void showEnterPasswordDialog() {
 				AlertDialog.Builder builder = new Builder(MainActivity.this);
@@ -117,6 +121,25 @@ public class MainActivity extends Activity {
 				final EditText  et_setpassword_password = (EditText) view.findViewById(R.id.et_setpassword_password);
 				Button btn_ok = (Button) view.findViewById(R.id.btn_ok);
 				Button btn_cancle = (Button) view.findViewById(R.id.btn_cancle);
+				ImageView showPassword = (ImageView) view.findViewById(R.id.iv_enterpassword_hide);
+				showPassword.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						if (count % 2 == 0) {
+							// show the password
+							// 0 is InputType for none
+							et_setpassword_password.setInputType(0);
+						} else {
+							// hide the password
+							// 129 is InputType for textPassword
+							et_setpassword_password.setInputType(129);
+						}
+						count++;
+						
+					}
+				});
+				
 				btn_ok.setOnClickListener(new OnClickListener() {
 					
 					@Override
@@ -126,7 +149,7 @@ public class MainActivity extends Activity {
 							Toast.makeText(getApplicationContext(), "请输入密码", Toast.LENGTH_SHORT).show();
 							return;
 						}
-						if (password.equals(sp.getString("password", ""))){
+						if (MD5Util.passwordMD5(password).equals(sp.getString("password", ""))){
 							Toast.makeText(getApplicationContext(), "密码正确", Toast.LENGTH_SHORT).show();
 							dialog.dismiss();
 						} else{
