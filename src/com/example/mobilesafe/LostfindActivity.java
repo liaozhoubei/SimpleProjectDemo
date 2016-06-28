@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 
 public class LostfindActivity extends Activity{
 
@@ -18,5 +19,11 @@ public class LostfindActivity extends Activity{
 		} else {
 			setContentView(R.layout.activity_lostfind);
 		}
+	}
+	
+	public void resetup(View v) {
+		Intent intent = new Intent(LostfindActivity.this, SetUp1Activity.class);
+		startActivity(intent);
+		finish();
 	}
 }
