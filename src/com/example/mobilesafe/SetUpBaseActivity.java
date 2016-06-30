@@ -18,9 +18,11 @@ public abstract class SetUpBaseActivity extends Activity{
 	private GestureDetector mGestureDetector;
 	protected SharedPreferences sp;
 
+
 	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
 		sp = getSharedPreferences("config", MODE_PRIVATE);				
 		mGestureDetector = new GestureDetector(getApplicationContext(), new GestureListener());
 	}
@@ -33,7 +35,7 @@ public abstract class SetUpBaseActivity extends Activity{
 	}
 	
 	// ScreenListener
-	public class GestureListener extends SimpleOnGestureListener{
+	private class GestureListener extends SimpleOnGestureListener{
 
 		@Override
 		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
