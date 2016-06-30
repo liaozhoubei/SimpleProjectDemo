@@ -14,8 +14,10 @@ public class SetUp3Activity extends SetUpBaseActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setup3);
+
 		et_setup3_safenum = (EditText)findViewById(R.id.et_setup3_safenum);
 		et_setup3_safenum.setText(sp.getString("safeNum", ""));
+
 	}
 
 	@Override
@@ -54,7 +56,7 @@ public class SetUp3Activity extends SetUpBaseActivity{
 			String safeNum = data.getStringExtra("phone");
 			et_setup3_safenum.setText(safeNum);
 		}
-		
+	
 	}
 
 }
