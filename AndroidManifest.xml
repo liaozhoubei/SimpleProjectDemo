@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -36,6 +37,7 @@
         <activity android:name="com.example.mobilesafe.SetUp4Activity"/>
         <activity android:name="com.example.mobilesafe.SetUpBaseActivity"/>
         <activity android:name="com.example.mobilesafe.LostfindActivity"/>
+        <activity android:name="com.example.mobilesafe.ContactActivity"/>
         <receiver android:name="com.example.mobilesafe.receiver.BootCompleteReceiver">
             <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

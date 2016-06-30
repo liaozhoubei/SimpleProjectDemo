@@ -7,9 +7,13 @@ import android.content.SharedPreferences;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-
+/**
+ * SIM Listener and keep warning if SIM serialNumber changing
+ * @author Bei
+ *
+ */
 public class BootCompleteReceiver extends BroadcastReceiver {
-
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		System.out.println("手机重启了，哈哈哈哈");

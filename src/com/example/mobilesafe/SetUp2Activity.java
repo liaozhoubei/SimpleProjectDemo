@@ -9,38 +9,37 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 public class SetUp2Activity extends SetUpBaseActivity{
+	private SettingView  sv_setup2_sim;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setup2);
-		final SettingView  sv_setting_update= (SettingView) findViewById(R.id.sv_setting_update);
-		if (TextUtils.isEmpty(sp.getString("sim", ""))){
-			sv_setting_update.setChecked(false);
+		sv_setup2_sim = (SettingView) findViewById(R.id.sv_setup2_sim);
+		if (TextUtils.isEmpty(sp.getString("sim", ""))) {
+			sv_setup2_sim.setChecked(false);
 		} else {
-			sv_setting_update.setChecked(true);
+			sv_setup2_sim.setChecked(true);
 		}
-		sv_setting_update.setOnClickListener(new OnClickListener() {
+		sv_setup2_sim.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				if (sv_setting_update.isChecked()) {
-					Editor edit = sp.edit();
+				Editor edit = sp.edit();
+				if (sv_setup2_sim.isChecked()) {
 					edit.putString("sim", "");
-					edit.commit();
-					sv_setting_update.setChecked(false);
+					sv_setup2_sim.setChecked(false);
 				} else{
 					// get the SIM number;
 					TelephonyManager tele = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-					tele.getLine1Number();// it is not use in china
+//					tele.getLine1Number();// it is not use in china
 					String sim = tele.getSimSerialNumber(); // need user permission
-					Editor edit = sp.edit();
 					edit.putString("sim", sim);
-					edit.commit();
-					sv_setting_update.setChecked(true);
+					sv_setup2_sim.setChecked(true);
 				}
-					
+				edit.commit();
 			}
 		});
 	}
@@ -56,9 +55,14 @@ public class SetUp2Activity extends SetUpBaseActivity{
 
 	@Override
 	public void next_activity() {
-		Intent intent = new Intent(SetUp2Activity.this, SetUp3Activity.class);
-		startActivity(intent);
-		finish();	
-		overridePendingTransition(R.anim.setup_enter_next, R.anim.setup_exit_next);
+		if (sv_setup2_sim.isChecked()){
+			Intent intent = new Intent(SetUp2Activity.this, SetUp3Activity.class);
+			startActivity(intent);
+			finish();	
+			overridePendingTransition(R.anim.setup_enter_next, R.anim.setup_exit_next);
+		} else {
+			Toast.makeText(getApplicationContext(), "请绑定SIM卡", Toast.LENGTH_SHORT).show();
+		}
+		
 	}
 }

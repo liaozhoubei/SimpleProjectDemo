@@ -36,6 +36,7 @@
         android:textSize="18sp" />
 
     <EditText
+        android:id="@+id/et_setup3_safenum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="请输入安全号码"
@@ -45,6 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/selector_contact_button"
+        android:onClick="selectContacts"
         android:text="选择联系人" />
 
     <LinearLayout

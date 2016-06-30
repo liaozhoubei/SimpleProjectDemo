@@ -1,13 +1,21 @@
 package com.example.mobilesafe;
 
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 public class SetUp3Activity extends SetUpBaseActivity{
+	private EditText et_setup3_safenum;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setup3);
+		et_setup3_safenum = (EditText)findViewById(R.id.et_setup3_safenum);
+		et_setup3_safenum.setText(sp.getString("safeNum", ""));
 	}
 
 	@Override
@@ -19,10 +27,34 @@ public class SetUp3Activity extends SetUpBaseActivity{
 	}
 	@Override
 	public void next_activity() {
-		Intent intent = new Intent(SetUp3Activity.this, SetUp4Activity.class);
-		startActivity(intent);
-		finish();	
-		overridePendingTransition(R.anim.setup_enter_next, R.anim.setup_exit_next);
+		String safeNum = et_setup3_safenum.getText().toString().trim();
+		if (!TextUtils.isEmpty(safeNum)){
+			Editor edit = sp.edit();
+			edit.putString("safeNum", safeNum);
+			edit.commit();
+			Intent intent = new Intent(SetUp3Activity.this, SetUp4Activity.class);
+			startActivity(intent);
+			finish();	
+			overridePendingTransition(R.anim.setup_enter_next, R.anim.setup_exit_next);
+		} else {
+			Toast.makeText(getApplicationContext(), "请设置安全号码", Toast.LENGTH_SHORT).show();
+		}
+		
+	}
+	// button of get contacts
+	public void selectContacts(View v) {
+		Intent intent = new Intent(SetUp3Activity.this, ContactActivity.class);
+		startActivityForResult(intent, 0);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (data != null) {
+			String safeNum = data.getStringExtra("phone");
+			et_setup3_safenum.setText(safeNum);
+		}
+		
 	}
 
 }
