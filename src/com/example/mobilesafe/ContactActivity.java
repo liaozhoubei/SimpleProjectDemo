@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.example.mobilesafe.engine.ContactEngine;
+import com.example.mobilesafe.utils.MyAsycnTaks;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -32,12 +32,6 @@ public class ContactActivity extends Activity {
 	private List<HashMap<String, String>> list;
 	private ListView lv_contact_contacts;
 	private ProgressBar loading;
-	private Handler mHandler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-			lv_contact_contacts.setAdapter(new MyAdapter(getApplicationContext()));
-			loading.setVisibility(View.INVISIBLE);
-		};
-	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +39,24 @@ public class ContactActivity extends Activity {
 		setContentView(R.layout.activity_contacts);
 		lv_contact_contacts = (ListView) findViewById(R.id.lv_contact_contacts);
 		loading = (ProgressBar) findViewById(R.id.loading);
-		loading.setVisibility(View.VISIBLE);
-		new Thread() {
-			public void run() {
+		
+		new MyAsycnTaks() {
+			
+			@Override
+			public void preTask() {
+				loading.setVisibility(View.VISIBLE);				
+			}
+			@Override
+			public void doingTast() {
 				SystemClock.sleep(3 * 1000);
 				list = ContactEngine.getAllContactInfo(getApplicationContext());
-				mHandler.sendEmptyMessage(0);
-			};
-		}.start();
+			}
+			@Override
+			public void postTast() {
+				lv_contact_contacts.setAdapter(new MyAdapter(getApplicationContext()));
+				loading.setVisibility(View.INVISIBLE);				
+			}
+		}.excute();;
 
 		lv_contact_contacts.setOnItemClickListener(new OnItemClickListener() {
 

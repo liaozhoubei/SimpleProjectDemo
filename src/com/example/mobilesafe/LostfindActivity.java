@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class LostfindActivity extends Activity{
 
@@ -18,6 +20,16 @@ public class LostfindActivity extends Activity{
 			finish();
 		} else {
 			setContentView(R.layout.activity_lostfind);
+			TextView tv_lostfind_safenum = (TextView) findViewById(R.id.tv_lostfind_safenum);
+			ImageView tv_lostfind_protected = (ImageView) findViewById(R.id.tv_lostfind_protected);
+			tv_lostfind_safenum.setText(sp.getString("safeNum", "5556"));
+			boolean b = sp.getBoolean("protected", false);
+			if (b) {
+				tv_lostfind_protected.setImageResource(R.drawable.lock);
+			} else {
+				tv_lostfind_protected.setImageResource(R.drawable.unlock);
+			}
+			
 		}
 	}
 	

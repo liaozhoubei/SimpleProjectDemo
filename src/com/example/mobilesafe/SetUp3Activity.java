@@ -1,7 +1,10 @@
 package com.example.mobilesafe;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -45,17 +48,42 @@ public class SetUp3Activity extends SetUpBaseActivity{
 	}
 	// button of get contacts
 	public void selectContacts(View v) {
-		Intent intent = new Intent(SetUp3Activity.this, ContactActivity.class);
-		startActivityForResult(intent, 0);
+//		Intent intent = new Intent(SetUp3Activity.this, ContactActivity.class);
+//		startActivityForResult(intent, 0);
+		
+		// get Contact from default Contacts
+		Intent intent = new Intent();
+		intent.setAction("android.intent.action.PICK");
+		intent.addCategory("android.intent.category.DEFAULT");
+		intent.setType("vnd.android.cursor.dir/phone_v2");
+		startActivityForResult(intent, 1);
+		
+		
 	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		// get Contact from custom Activity
+//		if (data != null) {
+//			String safeNum = data.getStringExtra("phone");
+//			et_setup3_safenum.setText(safeNum);
+//		}
+		
+		// get Contact from default Contacts
 		if (data != null) {
-			String safeNum = data.getStringExtra("phone");
-			et_setup3_safenum.setText(safeNum);
+			Uri uri = data.getData();
+			String num = null;
+			ContentResolver resolver = getContentResolver();
+			Cursor cursor = resolver.query(uri, null, null, null, null);
+			while (cursor.moveToNext()){
+				num = cursor.getString(cursor.getColumnIndex("data1"));
+			}
+			cursor.close();
+			num = num.replace("-", "");
+			et_setup3_safenum.setText(num);
 		}
+		
 	
 	}
 
