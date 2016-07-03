@@ -51,9 +51,13 @@ public class MainActivity extends Activity {
 						showEnterPasswordDialog();
 					}
 					break;
+				case 7:
+					Intent AToolsIntent = new Intent(MainActivity.this, AToolsActivity.class);
+					startActivity(AToolsIntent);
+					break;
 				case 8:
-					Intent intent = new Intent(MainActivity.this, SettingActivity.class);
-					startActivity(intent);
+					Intent SettingIntent = new Intent(MainActivity.this, SettingActivity.class);
+					startActivity(SettingIntent);
 					break;
 
 				default:

@@ -7,14 +7,18 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="21" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.SEND_SMS"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -30,23 +34,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.mobilesafe.MainActivity"/>
-        <activity android:name="com.example.mobilesafe.SettingActivity"/>
-        <activity android:name="com.example.mobilesafe.SetUp1Activity"/>
-        <activity android:name="com.example.mobilesafe.SetUp2Activity"/>
-        <activity android:name="com.example.mobilesafe.SetUp3Activity"/>
-        <activity android:name="com.example.mobilesafe.SetUp4Activity"/>
-        <activity android:name="com.example.mobilesafe.SetUpBaseActivity"/>
-        <activity android:name="com.example.mobilesafe.LostfindActivity"/>
-        <activity android:name="com.example.mobilesafe.ContactActivity"/>
-        <receiver android:name="com.example.mobilesafe.receiver.BootCompleteReceiver">
-            <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+        <activity android:name="com.example.mobilesafe.MainActivity" />
+        <activity android:name="com.example.mobilesafe.SettingActivity" />
+        <activity android:name="com.example.mobilesafe.SetUp1Activity" />
+        <activity android:name="com.example.mobilesafe.SetUp2Activity" />
+        <activity android:name="com.example.mobilesafe.SetUp3Activity" />
+        <activity android:name="com.example.mobilesafe.SetUp4Activity" />
+        <activity android:name="com.example.mobilesafe.SetUpBaseActivity" />
+        <activity android:name="com.example.mobilesafe.LostfindActivity" />
+        <activity android:name="com.example.mobilesafe.ContactActivity" />
+        <activity android:name="com.example.mobilesafe.AToolsActivity"/>
+        <activity android:name="com.example.mobilesafe.AddressActivity"/>
+
+        <receiver android:name="com.example.mobilesafe.receiver.BootCompleteReceiver" >
+            <intent-filter android:priority="1000" >
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.example.mobilesafe.receiver.SmsReceiver">
-            <intent-filter android:priority="1000">
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+        <receiver android:name="com.example.mobilesafe.receiver.SmsReceiver" >
+            <intent-filter android:priority="1000" >
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.example.mobilesafe.service.GPSService" />
+
+        <receiver
+            android:name="com.example.mobilesafe.receiver.Admin"
+            android:description="@string/sample_device_admin_description"
+            android:label="@string/sample_device_admin"
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin_sample" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
         </receiver>
     </application>

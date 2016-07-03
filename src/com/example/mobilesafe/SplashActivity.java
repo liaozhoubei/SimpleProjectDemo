@@ -1,6 +1,7 @@
 package com.example.mobilesafe;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -25,6 +26,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -111,6 +113,37 @@ public class SplashActivity extends Activity {
 					super.run();
 				}
 			}.start();;
+		}
+		copyDB();
+		
+	}
+	// Copy DataBase from asset
+	private void copyDB() {
+		File file = new File(getFilesDir(), "address.db");
+		if (!file.exists()) {
+			AssetManager assetManager = getAssets();
+			InputStream is = null;
+			FileOutputStream fos = null;
+			try{
+				is = assetManager.open("address.db");
+				fos = new FileOutputStream(file);
+				byte[] bt = new byte[1024];
+				int len = -1;
+				while((len = is.read(bt)) != -1) {
+					fos.write(bt, 0, len);
+				}
+			} catch(IOException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					is.close();
+					fos.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
 		}
 		
 	}
