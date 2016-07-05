@@ -33,5 +33,17 @@
 	    app:des_on="打开显示号码归属地"
 	    app:des_off="关闭显示号码归属地" >
     </com.example.mobilesafe.ui.SettingView>
+    
+    <com.example.mobilesafe.ui.SettingClickView
+        android:id="@+id/scv_setting_changedbg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ></com.example.mobilesafe.ui.SettingClickView>
+    
+         <com.example.mobilesafe.ui.SettingClickView
+        android:id="@+id/scv_setting_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ></com.example.mobilesafe.ui.SettingClickView>
 
 </LinearLayout>

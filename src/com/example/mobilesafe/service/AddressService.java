@@ -1,9 +1,14 @@
 package com.example.mobilesafe.service;
 
+import com.example.mobilesafe.R;
 import com.example.mobilesafe.dao.AddressDao;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
@@ -20,10 +25,12 @@ import android.widget.Toast;
  *
  */
 public class AddressService extends Service {
-
+	private SharedPreferences sp;
 	private PhoneListener listener;
 	private TelephonyManager telephonyManager;
 	private WindowManager windowManager;
+	private View mView;
+	private MyOutGoingCallReceiver mMyOutGoingCallReceiver;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -33,10 +40,16 @@ public class AddressService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		
+		sp = getSharedPreferences("config", MODE_PRIVATE);
 		telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		listener = new PhoneListener();
 		telephonyManager.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
+		
+		mMyOutGoingCallReceiver = new MyOutGoingCallReceiver();
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction("android.intent.action.NEW_OUTGOING_CALL");
+		registerReceiver(mMyOutGoingCallReceiver, intentFilter);
+		
 	}
 
 	public class PhoneListener extends PhoneStateListener {
@@ -55,33 +68,30 @@ public class AddressService extends Service {
 				break;
 			case TelephonyManager.CALL_STATE_OFFHOOK:
 				// 电话铃声挂断的时候
-				hideToast();
+				
 				break;
 			case TelephonyManager.CALL_STATE_IDLE:
 				// 处于空闲状态
+				hideToast();
 				break;
 
 			default:
 				break;
 			}
 		}
-
-
-
-
 	}
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		telephonyManager.listen(listener, PhoneStateListener.LISTEN_NONE);
-	}
+
 	
 	// show custom Toast
 	private void showToast(String queryAddress) {
-		TextView textview = new TextView(getApplicationContext());
-		textview.setText(queryAddress);
-		textview.setTextSize(20);
-		textview.setTextColor(Color.BLUE);
+		int[] bgcolor = new int[] { 
+				R.drawable.call_locate_white,
+				R.drawable.call_locate_orange, R.drawable.call_locate_blue,
+				R.drawable.call_locate_gray, R.drawable.call_locate_green };
+		mView = View.inflate(getApplicationContext(), R.layout.toast_custom, null);
+		TextView tv_toastcustom_address = (TextView) mView.findViewById(R.id.tv_toastcustom_address);
+		tv_toastcustom_address.setText(queryAddress);
+		mView.setBackgroundResource(bgcolor[sp.getInt("which", 0)]);
 		windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 		
 		WindowManager.LayoutParams params = new WindowManager.LayoutParams();
@@ -94,13 +104,47 @@ public class AddressService extends Service {
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
 		
-		windowManager.addView(textview, params);
+		windowManager.addView(mView, params);
 		
 		
 	}
-	
+	/**
+	 * hide custom Toast
+	 */
 	private void hideToast() {
-//		if (windowManager != null && )
+		if (windowManager != null && mView != null) {
+			windowManager.removeView(mView);
+			windowManager = null;
+			mView = null;
+		}
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		telephonyManager.listen(listener, PhoneStateListener.LISTEN_NONE);
+		unregisterReceiver(mMyOutGoingCallReceiver);
+	}
+	/**
+	 * 外拨电话时的广播接收者
+	 * @author Bei
+	 *
+	 */
+	private class MyOutGoingCallReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// 查询外拨电话时的归属地
+			String resultData = getResultData();
+			String queryAddress = AddressDao.queryAddress(resultData, context);
+			if (!TextUtils.isEmpty(queryAddress)){
+				showToast(queryAddress);
+			}
+			
+			
+		}
+		
+		
 	}
 
 }
