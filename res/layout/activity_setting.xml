@@ -15,17 +15,23 @@
         android:paddingTop="5dp"
         android:text="功能列表"
         android:textSize="22sp" />
+
     <com.example.mobilesafe.ui.SettingView
         android:id="@+id/sv_setting_update"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    app:title="更新设置"
-	    app:des_on="开启更新"
-	    app:des_off="取消更新"
-	    >
-        
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:des_off="取消更新"
+        app:des_on="开启更新"
+        app:title="更新设置" >
     </com.example.mobilesafe.ui.SettingView>
 
-
+    <com.example.mobilesafe.ui.SettingView
+        android:id="@+id/sv_setting_address"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    app:title="显示号码归属地"
+	    app:des_on="打开显示号码归属地"
+	    app:des_off="关闭显示号码归属地" >
+    </com.example.mobilesafe.ui.SettingView>
 
 </LinearLayout>

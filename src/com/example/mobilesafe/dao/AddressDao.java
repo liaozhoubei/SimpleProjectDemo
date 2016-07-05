@@ -12,7 +12,6 @@ public class AddressDao {
 		File file = new File(context.getFilesDir(), "address.db");
 		SQLiteDatabase sqLiteDatabase = SQLiteDatabase.openDatabase(file.getAbsolutePath(), null, SQLiteDatabase.OPEN_READONLY);
 		if (num.matches("^1[34578]\\d{9}$")) {
-//			Cursor cursor = sqLiteDatabase.rawQuery("select location from data2 where area=?", new String[]{num.substring(0, 7)});
 			Cursor cursor = sqLiteDatabase.rawQuery("select location from data2 where id=(select outkey from data1 where id=?)", new String[]{num.substring(0, 7)});
 			if (cursor.moveToNext()) {
 				location = cursor.getString(0);

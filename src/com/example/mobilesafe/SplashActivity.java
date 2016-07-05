@@ -11,6 +11,7 @@ import java.net.URL;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.example.mobilesafe.service.AddressService;
 import com.example.mobilesafe.utils.StreamUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -114,37 +115,47 @@ public class SplashActivity extends Activity {
 				}
 			}.start();;
 		}
-		copyDB();
 		
+		copyDB();// copy database to app
+
+//		Intent intent = new Intent(this, AddressService.class);
+//		startService(intent);
 	}
+	
 	// Copy DataBase from asset
 	private void copyDB() {
-		File file = new File(getFilesDir(), "address.db");
-		if (!file.exists()) {
-			AssetManager assetManager = getAssets();
-			InputStream is = null;
-			FileOutputStream fos = null;
-			try{
-				is = assetManager.open("address.db");
-				fos = new FileOutputStream(file);
-				byte[] bt = new byte[1024];
-				int len = -1;
-				while((len = is.read(bt)) != -1) {
-					fos.write(bt, 0, len);
+		new Thread(){
+			@Override
+			public void run() {
+				super.run();
+				File file = new File(getFilesDir(), "address.db");
+				if (!file.exists()) {
+					AssetManager assetManager = getAssets();
+					InputStream is = null;
+					FileOutputStream fos = null;
+					try{
+						is = assetManager.open("address.db");
+						fos = new FileOutputStream(file);
+						byte[] bt = new byte[1024];
+						int len = -1;
+						while((len = is.read(bt)) != -1) {
+							fos.write(bt, 0, len);
+						}
+					} catch(IOException e) {
+						e.printStackTrace();
+					} finally {
+						try {
+							is.close();
+							fos.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						
+					}
 				}
-			} catch(IOException e) {
-				e.printStackTrace();
-			} finally {
-				try {
-					is.close();
-					fos.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
 			}
-		}
+		}.start();
+
 		
 	}
 	/**

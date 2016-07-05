@@ -31,6 +31,7 @@ public class SettingView extends RelativeLayout {
 	public SettingView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init();
+		// get the value in layout
 		TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs, R.styleable.settingview, 0, 0);
 		String title = typedArray.getString(R.styleable.settingview_title);
 		des_on = typedArray.getString(R.styleable.settingview_des_on);
