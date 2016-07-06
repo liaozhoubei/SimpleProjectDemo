@@ -15,6 +15,7 @@ import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,6 +34,9 @@ public class AddressService extends Service {
 	private WindowManager windowManager;
 	private View mView;
 	private MyOutGoingCallReceiver mMyOutGoingCallReceiver;
+	private WindowManager.LayoutParams mParams;
+	private int mHeightPixels;
+	private int mWidthPixels;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -47,6 +51,12 @@ public class AddressService extends Service {
 		listener = new PhoneListener();
 		telephonyManager.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
 		
+		// 获取屏幕宽 、高
+		WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+		DisplayMetrics outMetrics = new DisplayMetrics();
+		windowManager.getDefaultDisplay().getMetrics(outMetrics );
+		mWidthPixels = outMetrics.widthPixels;
+		mHeightPixels = outMetrics.heightPixels;
 		mMyOutGoingCallReceiver = new MyOutGoingCallReceiver();
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction("android.intent.action.NEW_OUTGOING_CALL");
@@ -96,28 +106,88 @@ public class AddressService extends Service {
 		mView.setBackgroundResource(bgcolor[sp.getInt("which", 0)]);
 		windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 		
-		WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+		mParams = new WindowManager.LayoutParams();
 		
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        params.format = PixelFormat.TRANSLUCENT;
-        params.type = WindowManager.LayoutParams.TYPE_TOAST;
-        params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+        mParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        mParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        mParams.format = PixelFormat.TRANSLUCENT;
+        mParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+        mParams.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+//                | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                ;
         
-        params.gravity = Gravity.LEFT | Gravity.TOP;
-        params.x = sp.getInt("X", 100);
-        params.y = sp.getInt("Y", 100);
+        mParams.gravity = Gravity.LEFT | Gravity.TOP;
+        mParams.x = sp.getInt("X", 100);
+        mParams.y = sp.getInt("Y", 100);
         
         setTouch();
 		
-		windowManager.addView(mView, params);
+		windowManager.addView(mView, mParams);
 		
 		
 	}
 	private void setTouch() {
-		
+		mView.setOnTouchListener(new OnTouchListener() {
+			
+			private int mStartX;
+			private int mStartY;
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				switch(event.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+					// 获得手指位置初始值
+					mStartX = (int) event.getRawX();
+					mStartY = (int) event.getRawY();
+					break;
+				case MotionEvent.ACTION_MOVE:
+					// 手指移动的时候
+					// 获得手指移动时的坐标
+					int newX = (int) event.getRawX();
+					int newY = (int) event.getRawY();
+					
+					// 计算手指移动的距离
+					int dx = newX - mStartX;
+					int dy = newY - mStartY;
+					
+					mParams.x += dx;
+					mParams.y += dy;
+					
+					if (mParams.x < 0) {
+						mParams.x = 0;
+					}
+					if (mParams.y < 0){
+						mParams.y = 0;
+					}
+					if (mParams.x > mWidthPixels - mView.getWidth()){
+						mParams.x = mWidthPixels - mView.getWidth();
+					}
+					if (mParams.y > mHeightPixels - mView.getHeight()) {
+						mParams.y = mHeightPixels - mView.getHeight();
+					}
+					
+
+					
+					windowManager.updateViewLayout(mView, mParams);
+					
+					mStartX = newX;
+					mStartY = newY;
+					break;
+				case MotionEvent.ACTION_UP:
+					// 手指抬起的时候
+					Editor edit = sp.edit();
+					int X = mParams.x;
+					int Y = mParams.y;
+					edit.putInt("X", X);
+					edit.putInt("Y", Y);
+					edit.commit();
+					break;
+				}
+				
+				return true;
+			}
+		});
 	}
 
 	/**
