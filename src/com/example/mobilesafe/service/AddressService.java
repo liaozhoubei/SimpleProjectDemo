@@ -9,16 +9,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.content.SharedPreferences.Editor;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 /**
  * 监听电话，展示归属地
  * @author ASUS-H61M
@@ -82,7 +84,7 @@ public class AddressService extends Service {
 	}
 
 	
-	// show custom Toast
+	// show custom Toast when call on
 	private void showToast(String queryAddress) {
 		int[] bgcolor = new int[] { 
 				R.drawable.call_locate_white,
@@ -103,11 +105,21 @@ public class AddressService extends Service {
         params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+        
+        params.gravity = Gravity.LEFT | Gravity.TOP;
+        params.x = sp.getInt("X", 100);
+        params.y = sp.getInt("Y", 100);
+        
+        setTouch();
 		
 		windowManager.addView(mView, params);
 		
 		
 	}
+	private void setTouch() {
+		
+	}
+
 	/**
 	 * hide custom Toast
 	 */

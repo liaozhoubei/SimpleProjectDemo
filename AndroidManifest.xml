@@ -48,7 +48,7 @@
         <activity android:name="com.example.mobilesafe.AToolsActivity" />
         <activity android:name="com.example.mobilesafe.AddressActivity" />
         <activity android:name="com.example.mobilesafe.DragViewActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar"></activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
 
         <receiver android:name="com.example.mobilesafe.receiver.BootCompleteReceiver" >
             <intent-filter android:priority="1000" >
