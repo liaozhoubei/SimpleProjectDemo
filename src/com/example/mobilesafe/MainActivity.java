@@ -55,6 +55,10 @@ public class MainActivity extends Activity {
 					Intent communicationIntent = new Intent(MainActivity.this, CallSmsSafeActivity.class);
 					startActivity(communicationIntent);
 					break;
+				case 2:
+					Intent softManagerIntent = new Intent(MainActivity.this, SoftMangaerActivity.class);
+					startActivity(softManagerIntent);
+					break;
 				case 7:
 					Intent AToolsIntent = new Intent(MainActivity.this, AToolsActivity.class);
 					startActivity(AToolsIntent);
