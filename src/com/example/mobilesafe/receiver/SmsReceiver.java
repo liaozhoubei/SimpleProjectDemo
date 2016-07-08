@@ -33,7 +33,7 @@ public class SmsReceiver extends BroadcastReceiver {
 			String body = sms.getMessageBody();
 			String sender = sms.getOriginatingAddress();
 			System.out.println("姓名" + sender + "---- 内容" + body);
-			abortBroadcast();
+//			abortBroadcast();
 			if ("#*location*#".equals(body)) {
 				// GPS追踪
 				Intent GPSintent = new Intent(context, GPSService.class);

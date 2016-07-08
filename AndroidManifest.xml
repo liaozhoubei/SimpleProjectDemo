@@ -22,6 +22,9 @@
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
 
     <application
         android:allowBackup="true"
@@ -47,6 +50,7 @@
         <activity android:name="com.example.mobilesafe.LostfindActivity" />
         <activity android:name="com.example.mobilesafe.ContactActivity" />
         <activity android:name="com.example.mobilesafe.AToolsActivity" />
+        <activity android:name="com.example.mobilesafe.CallSmsSafeActivity"/>
         <activity android:name="com.example.mobilesafe.AddressActivity" />
         <activity android:name="com.example.mobilesafe.DragViewActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
@@ -77,6 +81,7 @@
 
         <service android:name="com.example.mobilesafe.service.GPSService" />
         <service android:name="com.example.mobilesafe.service.AddressService" />
+        <service android:name="com.example.mobilesafe.service.BlackNumService"/>
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.example.mobilesafe;
 
 import com.example.mobilesafe.service.AddressService;
+import com.example.mobilesafe.service.BlackNumService;
 import com.example.mobilesafe.ui.SettingClickView;
 import com.example.mobilesafe.ui.SettingView;
 import com.example.mobilesafe.utils.AddressUtil;
@@ -26,6 +27,7 @@ public class SettingActivity extends Activity{
 	private SettingView sv_setting_address;
 	private SettingClickView scv_setting_changedbg;
 	private SettingClickView scv_setting_location;
+	private SettingView sv_setting_blacknum;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,7 @@ public class SettingActivity extends Activity{
 		sv_setting_address = (SettingView) findViewById(R.id.sv_setting_address);
 		scv_setting_changedbg = (SettingClickView) findViewById(R.id.scv_setting_changedbg);
 		scv_setting_location = (SettingClickView) findViewById(R.id.scv_setting_location);
+		sv_setting_blacknum = (SettingView) findViewById(R.id.sv_setting_blacknum);
 		
 		updata();
 		changedbg();
@@ -101,7 +104,31 @@ public class SettingActivity extends Activity{
 	protected void onStart() {
 		// 当界面在后天运行，但是用户直接点击stopServer服务时的回显
 		address();
+		blackNum();
 		super.onStart();
+	}
+	// 黑名单拦截操作
+	private void blackNum() {
+		if (AddressUtil.isRunningServer("com.example.mobilesafe.service.BlackNumService", getApplicationContext())){
+			sv_setting_blacknum.setChecked(true);
+		} else {
+			sv_setting_blacknum.setChecked(false);
+		}
+		sv_setting_blacknum.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(SettingActivity.this, BlackNumService.class);
+				if (sv_setting_blacknum.isChecked()) {
+					stopService(intent);
+					sv_setting_blacknum.setChecked(false);
+				} else {
+					startService(intent);
+					sv_setting_blacknum.setChecked(true);
+				}				
+			}
+		});
+				
 	}
 	private void address() {
 		if (AddressUtil.isRunningServer("com.example.mobilesafe.service.AddressService", getApplicationContext())){

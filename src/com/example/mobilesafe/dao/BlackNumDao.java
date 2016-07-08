@@ -1,5 +1,9 @@
 package com.example.mobilesafe.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.example.mobilesafe.bean.BlackNumInfo;
 import com.example.mobilesafe.db.BlackNumOpenHlper;
 
 import android.content.ContentValues;
@@ -33,14 +37,10 @@ public class BlackNumDao {
 		values.put("mode", mode);
 		sqLiteDatabase.update(BlackNumOpenHlper.DB_NAME, values, "blacknum=?", new String[]{blacknum});
 		sqLiteDatabase.close();
-		
-//		ContentValues values = new ContentValues();
-//		values.put("mode", mode);
-//		sqLiteDatabase.update(BlackNumOpenHlper.DB_NAME, values, "blacknum=?", new String[]{blacknum});
-//		//3.关闭数据库
-//		sqLiteDatabase.close();
+
 	}
 	
+	// 查询单个黑名单
 	public int queryBlackNumMode(String blacknum){
 		int mode = -1;
 		SQLiteDatabase sqLiteDatabase = mBlackNumOpenHlper.getWritableDatabase();
@@ -52,6 +52,37 @@ public class BlackNumDao {
 		sqLiteDatabase.close();
 		return mode;
 		
+	}
+	// 查询所有黑名单
+	public List<BlackNumInfo> queryAllBlackNumInfo(){
+		List<BlackNumInfo> list = new ArrayList<BlackNumInfo>();
+		SQLiteDatabase sqLiteDatabase = mBlackNumOpenHlper.getWritableDatabase();
+		Cursor cursor = sqLiteDatabase.query(BlackNumOpenHlper.DB_NAME, new String[]{"blacknum", "mode"}, null, null, null, null, "_id desc");
+		while(cursor.moveToNext()){
+			String blacknum = cursor.getString(0);
+			int mode = cursor.getInt(1);
+			BlackNumInfo info = new BlackNumInfo(blacknum, mode);
+			list.add(info);
+		}
+		cursor.close();
+		sqLiteDatabase.close();
+		return list;
+	}
+	
+	// 分批查询黑名单
+	public List<BlackNumInfo> queryPartBlackNumInfo(int startNum, int endNum) {
+		List<BlackNumInfo> list = new ArrayList<BlackNumInfo>();
+		SQLiteDatabase sqLiteDatabase = mBlackNumOpenHlper.getWritableDatabase();
+		Cursor cursor = sqLiteDatabase.rawQuery("select blacknum, mode from info order by _id desc limit ? offset ?", new String[]{endNum + "", startNum + ""});
+		while (cursor.moveToNext()){
+			String blacknum = cursor.getString(0);
+			int mode = cursor.getInt(1);
+			BlackNumInfo info = new BlackNumInfo(blacknum, mode);
+			list.add(info);
+		}
+		cursor.close();
+		sqLiteDatabase.close();
+		return list;
 	}
 	
 	

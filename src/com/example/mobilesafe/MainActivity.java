@@ -51,6 +51,10 @@ public class MainActivity extends Activity {
 						showEnterPasswordDialog();
 					}
 					break;
+				case 1:
+					Intent communicationIntent = new Intent(MainActivity.this, CallSmsSafeActivity.class);
+					startActivity(communicationIntent);
+					break;
 				case 7:
 					Intent AToolsIntent = new Intent(MainActivity.this, AToolsActivity.class);
 					startActivity(AToolsIntent);
