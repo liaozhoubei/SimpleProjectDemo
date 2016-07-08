@@ -1,4 +1,6 @@
-package com.example.mobilesafe.db;
+package com.example.mobilesafe.dao;
+
+import com.example.mobilesafe.db.BlackNumOpenHlper;
 
 import android.content.ContentValues;
 import android.content.Context;
