@@ -1,5 +1,7 @@
 package com.example.mobilesafe;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.example.mobilesafe.bean.AppInfo;
@@ -7,6 +9,7 @@ import com.example.mobilesafe.engine.AppEngine;
 import com.example.mobilesafe.utils.MyAsycnTaks;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,8 @@ public class SoftMangaerActivity extends Activity {
 	private ListView mLv_softmanager_application;
 	private ProgressBar mLoading;
 	private List<AppInfo> appInfos;
+	private List<AppInfo> userInofs;
+	private List<AppInfo> systemInfos;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +53,16 @@ public class SoftMangaerActivity extends Activity {
 			@Override
 			public void doingTast() {
 				appInfos = AppEngine.getAppInfos(getApplicationContext());
-				for (AppInfo info : appInfos){
-					System.out.println(info.toString());
+				userInofs = new ArrayList<AppInfo>();
+				systemInfos = new ArrayList<AppInfo>();
+				for (AppInfo appInfo : appInfos) {
+					if (appInfo.isUser()){
+						userInofs.add(appInfo);
+					} else {
+						systemInfos.add(appInfo);
+					}
 				}
+
 			}
 		}.excute();
 	}
@@ -59,7 +71,7 @@ public class SoftMangaerActivity extends Activity {
 
 		@Override
 		public int getCount() {
-			return appInfos.size();
+			return userInofs.size() + systemInfos.size();
 		}
 
 		@Override
@@ -89,6 +101,22 @@ public class SoftMangaerActivity extends Activity {
 				viewHolder = (ViewHolder) view.getTag();
 			}
 			AppInfo info = appInfos.get(position);
+			
+			
+			if (position == 0 ) {
+				TextView text = new TextView(getApplicationContext());
+				text.setText("用户程序");
+				text.setBackgroundColor(Color.GRAY);
+				text.setTextColor(Color.WHITE);
+				return text;
+			} else if ( position == (userInofs.size() + 1)) {
+				TextView text = new TextView(getApplicationContext());
+				text.setText("系统程序");
+				text.setBackgroundColor(Color.GRAY);
+				text.setTextColor(Color.WHITE);
+				return text;
+			}
+			
 			viewHolder.iv_itemsoftmanage_icon.setImageDrawable(info.getIcon());
 			viewHolder.tv_softmanager_name.setText(info.getName());
 			viewHolder.tv_softmanager_version.setText(info.getVersionName());
