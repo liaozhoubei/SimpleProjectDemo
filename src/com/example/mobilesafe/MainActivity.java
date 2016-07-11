@@ -59,6 +59,10 @@ public class MainActivity extends Activity {
 					Intent softManagerIntent = new Intent(MainActivity.this, SoftMangaerActivity.class);
 					startActivity(softManagerIntent);
 					break;
+				case 3:
+					Intent taskManagerIntent = new Intent(MainActivity.this, TaskManagerActivity.class);
+					startActivity(taskManagerIntent);
+					break;
 				case 7:
 					Intent AToolsIntent = new Intent(MainActivity.this, AToolsActivity.class);
 					startActivity(AToolsIntent);

@@ -23,10 +23,10 @@ public class TaskEngine {
 		for(RunningAppProcessInfo processInfo : runningAppProcesses){
 			TaskInfo taskInfo = new TaskInfo();
 			String processName = processInfo.processName;
-			taskInfo.setName(processName);
+			taskInfo.setPackageName(processName);
 			MemoryInfo[] processMemoryInfo = activityManager.getProcessMemoryInfo(new int[]{processInfo.pid});
 			int totalPss = processMemoryInfo[0].getTotalPss();
-			int romSize = totalPss*1024;
+			long romSize = totalPss*1024;
 			taskInfo.setRomSize(romSize);
 			try {
 				ApplicationInfo applicationInfo = packageManager.getApplicationInfo(processName, 0);
@@ -36,15 +36,18 @@ public class TaskEngine {
 				taskInfo.setName(appname);
 				int flags = applicationInfo.flags;
 				boolean isUser;
-				if ((applicationInfo.flags & flags) == applicationInfo.flags){
+				if ((applicationInfo.FLAG_SYSTEM & flags) == applicationInfo.FLAG_SYSTEM){
 					isUser = false;
 				} else {
 					isUser = true;
 				}
+				taskInfo.setUser(isUser);
 			} catch (NameNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		
+			list.add(taskInfo);
 		}
 		
 		return list;

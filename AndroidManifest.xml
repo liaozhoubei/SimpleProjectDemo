@@ -52,6 +52,7 @@
         <activity android:name="com.example.mobilesafe.AToolsActivity" />
         <activity android:name="com.example.mobilesafe.CallSmsSafeActivity"/>
         <activity android:name="com.example.mobilesafe.SoftMangaerActivity"/>
+        <activity android:name="com.example.mobilesafe.TaskManagerActivity"/>
         <activity android:name="com.example.mobilesafe.AddressActivity" />
         <activity android:name="com.example.mobilesafe.DragViewActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
