@@ -59,7 +59,10 @@ public class TaskManagerActivity extends Activity {
 				if (taskinfo.isChecked()) {
 					taskinfo.setChecked(false);
 				} else {
-					taskinfo.setChecked(true);
+					if (!taskinfo.getPackageName().equals(getPackageName())){
+						taskinfo.setChecked(true);
+					}
+					
 				}
 				ViewHolder viewHolder = (ViewHolder) view.getTag();
 				viewHolder.cb_itemtaskmanager_ischecked.setChecked(taskinfo.isChecked());
@@ -208,21 +211,63 @@ public class TaskManagerActivity extends Activity {
 	 * @param v
 	 */
 	public void all(View v){
-		
+		for (int i = 0; i < mUserInfos.size(); i ++) {
+			if ( !mUserInfos.get(i).getPackageName().equals(getPackageName())){
+				mUserInfos.get(i).setChecked(true);
+			}
+			
+		}
+		for (int i = 0; i < mSystemInfos.size(); i++) {
+			mSystemInfos.get(i).setChecked(true);
+		}
+		mTaskInfoAdapter.notifyDataSetChanged();
 	}
 	/**
 	 * 取消
 	 * @param v
 	 */
 	public void cancel(View v){
-	
+		for (int i = 0; i < mUserInfos.size(); i ++) {
+			mUserInfos.get(i).setChecked(false);
+		}
+		for (int i = 0; i < mSystemInfos.size(); i++) {
+			mSystemInfos.get(i).setChecked(false);
+		}
+		mTaskInfoAdapter.notifyDataSetChanged();
 	}
 	/**
 	 * 清理
 	 * @param v
 	 */
 	public void clear(View v){
-	
+		ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+		List<TaskInfo> deleteTaskInfo = new ArrayList<TaskInfo>();
+		for (int i = 0; i < mUserInfos.size(); i ++) {
+			if (mUserInfos.get(i).isChecked()){
+				activityManager.killBackgroundProcesses(mUserInfos.get(i).getPackageName());
+				deleteTaskInfo.add(mUserInfos.get(i));
+			}
+		}
+		for (int i = 0; i < mSystemInfos.size(); i++) {
+			if (mSystemInfos.get(i).isChecked()){
+				activityManager.killBackgroundProcesses(mSystemInfos.get(i).getPackageName());
+				deleteTaskInfo.add(mSystemInfos.get(i));
+			}
+		}
+		int memory = 0;
+		for (TaskInfo info : deleteTaskInfo){
+			if (info.isUser()){
+				mUserInfos.remove(info);
+			} else {
+				mSystemInfos.remove(info);
+			}
+			memory += info.getRomSize();
+		}
+		String formatFileSize = Formatter.formatFileSize(getApplicationContext(), memory);
+		Toast.makeText(getApplicationContext(), "共清理"+deleteTaskInfo.size()+"个进程,释放"+formatFileSize+"内存空间", 0).show();
+		deleteTaskInfo.clear();
+		deleteTaskInfo = null;
+		mTaskInfoAdapter.notifyDataSetChanged();
 	}
 	/**
 	 * 设置
