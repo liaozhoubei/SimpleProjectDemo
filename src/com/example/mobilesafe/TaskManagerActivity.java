@@ -6,10 +6,12 @@ import java.util.List;
 import com.example.mobilesafe.bean.TaskInfo;
 import com.example.mobilesafe.engine.TaskEngine;
 import com.example.mobilesafe.utils.MyAsycnTaks;
+import com.example.mobilesafe.utils.TaskUtil;
 
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.graphics.Color;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.Formatter;
@@ -34,6 +36,8 @@ public class TaskManagerActivity extends Activity {
 	private List<TaskInfo> mSystemInfos;
 	private TaskInfoAdapter mTaskInfoAdapter;
 	private TaskInfo taskinfo;
+	private TextView tv_taskmanager_freeandtotalram;
+	private TextView tv_taskmanager_processes;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,23 @@ public class TaskManagerActivity extends Activity {
 		setContentView(R.layout.activity_taskmanager);
 		mLv_taskmanager_processes = (ListView) findViewById(R.id.lv_taskmanager_processes);
 		mLoading = (ProgressBar) findViewById(R.id.loading);
+		tv_taskmanager_processes = (TextView)findViewById(R.id.tv_taskmanager_processes);
+		tv_taskmanager_freeandtotalram = (TextView)findViewById(R.id.tv_taskmanager_processes);
+		int processCount = TaskUtil.getProcessCount(getApplicationContext());
+		tv_taskmanager_processes.setText("正在运行的程序个数：" + processCount);
+		
+		long availableRam = TaskUtil.getAvailableRam(getApplicationContext());
+		String RamNow = Formatter.formatFileSize(getApplicationContext(), availableRam);
+		int version = android.os.Build.VERSION.SDK_INT;
+		long totalRam;
+		if (version >= 16){
+			totalRam = TaskUtil.getTotalRam(getApplicationContext());
+			
+		} else {
+			totalRam = TaskUtil.getTotalRam();
+		}
+		String allRam = Formatter.formatFileSize(getApplicationContext(), totalRam);
+		tv_taskmanager_freeandtotalram.setText("可用内存\\总内存：" + RamNow + "\\" + allRam);
 		filldata();
 		listViewItemClick();
 	}
