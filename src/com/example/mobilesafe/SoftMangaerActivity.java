@@ -6,6 +6,7 @@ import java.util.List;
 import com.example.mobilesafe.bean.AppInfo;
 import com.example.mobilesafe.engine.AppEngine;
 import com.example.mobilesafe.utils.AppUtil;
+import com.example.mobilesafe.utils.DensityUtil;
 import com.example.mobilesafe.utils.MyAsycnTaks;
 
 import android.app.Activity;
@@ -52,7 +53,6 @@ public class SoftMangaerActivity extends Activity implements OnClickListener{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_softmanager);
 		mLoading = (ProgressBar) findViewById(R.id.loading);
@@ -111,7 +111,7 @@ public class SoftMangaerActivity extends Activity implements OnClickListener{
 				System.out.println(y + "纵坐标");
 				mPopupWindow = new PopupWindow(contentView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				mPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-				mPopupWindow.showAtLocation(parent, Gravity.LEFT | Gravity.TOP,  x + 100, y);
+				mPopupWindow.showAtLocation(parent, Gravity.LEFT | Gravity.TOP,  x + DensityUtil.dip2qx(getApplicationContext(), 100), y);
 				
 				// 设置动画效果
 				//前四个参数 :　控制控件由没有变到有   动画 0:没有    1:整个控件
@@ -134,7 +134,6 @@ public class SoftMangaerActivity extends Activity implements OnClickListener{
 			
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				// TODO Auto-generated method stub
 				
 			}
 			
@@ -352,7 +351,6 @@ public class SoftMangaerActivity extends Activity implements OnClickListener{
 	}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 		fillData();
 	}

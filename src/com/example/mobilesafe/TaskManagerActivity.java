@@ -11,7 +11,6 @@ import com.example.mobilesafe.utils.TaskUtil;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.graphics.Color;
-import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.Formatter;
@@ -38,6 +37,8 @@ public class TaskManagerActivity extends Activity {
 	private TaskInfo taskinfo;
 	private TextView tv_taskmanager_freeandtotalram;
 	private TextView tv_taskmanager_processes;
+	private int mProcessCount;
+	private boolean isshowSystem = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +47,9 @@ public class TaskManagerActivity extends Activity {
 		mLv_taskmanager_processes = (ListView) findViewById(R.id.lv_taskmanager_processes);
 		mLoading = (ProgressBar) findViewById(R.id.loading);
 		tv_taskmanager_processes = (TextView)findViewById(R.id.tv_taskmanager_processes);
-		tv_taskmanager_freeandtotalram = (TextView)findViewById(R.id.tv_taskmanager_processes);
-		int processCount = TaskUtil.getProcessCount(getApplicationContext());
-		tv_taskmanager_processes.setText("正在运行的程序个数：" + processCount);
+		tv_taskmanager_freeandtotalram = (TextView)findViewById(R.id.tv_taskmanager_freeandtotalram);
+		mProcessCount = TaskUtil.getProcessCount(getApplicationContext());
+		tv_taskmanager_processes.setText("正在运行的程序个数：" + mProcessCount);
 		
 		long availableRam = TaskUtil.getAvailableRam(getApplicationContext());
 		String RamNow = Formatter.formatFileSize(getApplicationContext(), availableRam);
@@ -131,7 +132,8 @@ public class TaskManagerActivity extends Activity {
 
 		@Override
 		public int getCount() {
-			return mUserInfos.size() + mSystemInfos.size() + 2;
+			// 设置是否隐藏系统进程
+			return isshowSystem == true ? mUserInfos.size() + 1 + mSystemInfos.size() + 1 : mUserInfos.size() + 1;
 		}
 
 		@Override
@@ -286,15 +288,34 @@ public class TaskManagerActivity extends Activity {
 		}
 		String formatFileSize = Formatter.formatFileSize(getApplicationContext(), memory);
 		Toast.makeText(getApplicationContext(), "共清理"+deleteTaskInfo.size()+"个进程,释放"+formatFileSize+"内存空间", 0).show();
+		
+		
+		mProcessCount = mProcessCount- deleteTaskInfo.size();
+		tv_taskmanager_processes.setText("正在运行的程序个数：" + mProcessCount);
+		
+		long availableRam = TaskUtil.getAvailableRam(getApplicationContext());
+		String RamNow = Formatter.formatFileSize(getApplicationContext(), availableRam);
+		int version = android.os.Build.VERSION.SDK_INT;
+		long totalRam;
+		if (version >= 16){
+			totalRam = TaskUtil.getTotalRam(getApplicationContext());
+			
+		} else {
+			totalRam = TaskUtil.getTotalRam();
+		}
+		String allRam = Formatter.formatFileSize(getApplicationContext(), totalRam);
+		tv_taskmanager_freeandtotalram.setText("可用内存\\总内存：" + RamNow + "\\" + allRam);
+		
 		deleteTaskInfo.clear();
 		deleteTaskInfo = null;
 		mTaskInfoAdapter.notifyDataSetChanged();
 	}
 	/**
-	 * 设置
+	 * 设置 是否显示系统进程
 	 * @param v
 	 */
 	public void setting(View v){
-		
+		isshowSystem = !isshowSystem;
+		mTaskInfoAdapter.notifyDataSetChanged();
 	}
 }
