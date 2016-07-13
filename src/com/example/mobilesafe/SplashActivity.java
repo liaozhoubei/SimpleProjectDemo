@@ -24,10 +24,13 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -120,8 +123,30 @@ public class SplashActivity extends Activity {
 
 //		Intent intent = new Intent(this, AddressService.class);
 //		startService(intent);
+		
+		shortcut();
 	}
-	
+	// 在桌面创建快捷方式
+	private void shortcut() {
+		if (sp.getBoolean("firstShortcut", true)){
+			Intent intent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+			intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "手机卫士");
+			Bitmap decodeResource = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+			intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, decodeResource);
+			Intent intent2 = new Intent();
+			intent2.setAction("com.example.mobilesafe.main");
+			intent2.addCategory("android.intent.category.DEFAULT");
+			intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent2);
+			sendBroadcast(intent);
+			
+			Editor edit = sp.edit();
+			edit.putBoolean("firstShortcut", false);
+			edit.commit();
+		}
+		
+		
+	}
+
 	// Copy DataBase from asset
 	private void copyDB() {
 		new Thread(){
