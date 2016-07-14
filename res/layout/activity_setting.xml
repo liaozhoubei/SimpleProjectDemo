@@ -55,4 +55,13 @@
         app:title="黑名单拦截" >
     </com.example.mobilesafe.ui.SettingView>
 
+    <com.example.mobilesafe.ui.SettingView
+        android:id="@+id/sv_setting_lock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:des_off="关闭软件锁"
+        app:des_on="打开软件锁"
+        app:title="软件锁" >
+    </com.example.mobilesafe.ui.SettingView>
+
 </LinearLayout>

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.mobilesafe.bean.AppInfo;
+import com.example.mobilesafe.dao.WatchDogDao;
 import com.example.mobilesafe.engine.AppEngine;
 import com.example.mobilesafe.utils.AppUtil;
 import com.example.mobilesafe.utils.DensityUtil;
@@ -30,6 +31,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -50,11 +52,15 @@ public class SoftMangaerActivity extends Activity implements OnClickListener{
 	private AppInfo info;
 	private PopupWindow mPopupWindow;
 	private AppInfoAdapter appInfoAdapter;
+	private WatchDogDao watchDogDao;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_softmanager);
+		
+		watchDogDao = new WatchDogDao(getApplicationContext());
+		
 		mLoading = (ProgressBar) findViewById(R.id.loading);
 		mLv_softmanager_application = (ListView) findViewById(R.id.lv_softmanager_application);
 		tv_softmanager_userorsystem = (TextView)findViewById(R.id.tv_softmanager_userorsystem);
@@ -72,6 +78,44 @@ public class SoftMangaerActivity extends Activity implements OnClickListener{
 		fillData();
 		listViewOnScroll();
 		listViewItemClick();
+		listViewLongItemClick();
+	}
+	private void listViewLongItemClick() {
+		mLv_softmanager_application.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				if (position == 0 || position == userInofs.size() + 1) {
+					return true;
+				} 
+				if (position <= userInofs.size() - 1) {
+					info = userInofs.get(position);
+				} else  {
+					info = systemInfos.get(position - userInofs.size());
+				}
+				ViewHolder viewHolder = (ViewHolder) view.getTag();
+				if (watchDogDao.queryLockApp(info.getPackagName())){
+					// 解锁
+					watchDogDao.deleteLockApp(info.getPackagName());
+					viewHolder.iv_itemsoftmanager_islock.setImageResource(R.drawable.unlock);
+				} else {
+					// 不对自身加锁
+					if (!info.getPackagName().equals(getPackageName())){
+						// 加锁
+						watchDogDao.addLockApp(info.getPackagName());
+						viewHolder.iv_itemsoftmanager_islock.setImageResource(R.drawable.lock);
+					} else {
+						Toast.makeText(getApplicationContext(), "不能对本应用加锁", Toast.LENGTH_SHORT).show();
+					}
+					
+				}
+				
+				// 更新全部条目
+				//appInfoAdapter.notifyDataSetChanged();
+				// 返回true则代表点击事件在这里终止了
+				return true;
+			}
+		});		
 	}
 	private void listViewItemClick() {
 		mLv_softmanager_application.setOnItemClickListener(new OnItemClickListener() {
@@ -242,6 +286,7 @@ public class SoftMangaerActivity extends Activity implements OnClickListener{
 				viewHolder.tv_softmanager_name = (TextView) view.findViewById(R.id.tv_softmanager_name);
 				viewHolder.tv_softmanager_issd = (TextView) view.findViewById(R.id.tv_softmanager_issd);
 				viewHolder.tv_softmanager_version = (TextView) view.findViewById(R.id.tv_softmanager_version);
+				viewHolder.iv_itemsoftmanager_islock = (ImageView) view.findViewById(R.id.iv_itemsoftmanager_islock);
 				view.setTag(viewHolder);
 			}
 			AppInfo info;
@@ -259,15 +304,26 @@ public class SoftMangaerActivity extends Activity implements OnClickListener{
 			}else{
 				viewHolder.tv_softmanager_issd.setText("手机内存");
 			}
+			
+			if(watchDogDao.queryLockApp(info.getPackagName())){
+				// 加锁
+				viewHolder.iv_itemsoftmanager_islock.setImageResource(R.drawable.lock);
+			} else{
+				// 解锁
+				viewHolder.iv_itemsoftmanager_islock.setImageResource(R.drawable.unlock);
+			}
+			
 			return view;
 		}
 		
-		class ViewHolder{
-			ImageView iv_itemsoftmanage_icon;
-			TextView tv_softmanager_name;
-			TextView tv_softmanager_issd;
-			TextView tv_softmanager_version;
-		}
+
+	}
+	
+	class ViewHolder{
+		ImageView iv_itemsoftmanage_icon, iv_itemsoftmanager_islock;
+		TextView tv_softmanager_name;
+		TextView tv_softmanager_issd;
+		TextView tv_softmanager_version;
 	}
 	
 	@Override

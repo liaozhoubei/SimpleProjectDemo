@@ -2,6 +2,7 @@ package com.example.mobilesafe;
 
 import com.example.mobilesafe.service.AddressService;
 import com.example.mobilesafe.service.BlackNumService;
+import com.example.mobilesafe.service.WatchDogService;
 import com.example.mobilesafe.ui.SettingClickView;
 import com.example.mobilesafe.ui.SettingView;
 import com.example.mobilesafe.utils.AddressUtil;
@@ -25,6 +26,7 @@ public class SettingActivity extends Activity{
 	private SharedPreferences sp;
 	private SettingView sv_setting_update;
 	private SettingView sv_setting_address;
+	private SettingView sv_setting_lock;
 	private SettingClickView scv_setting_changedbg;
 	private SettingClickView scv_setting_location;
 	private SettingView sv_setting_blacknum;
@@ -39,6 +41,7 @@ public class SettingActivity extends Activity{
 		scv_setting_changedbg = (SettingClickView) findViewById(R.id.scv_setting_changedbg);
 		scv_setting_location = (SettingClickView) findViewById(R.id.scv_setting_location);
 		sv_setting_blacknum = (SettingView) findViewById(R.id.sv_setting_blacknum);
+		sv_setting_lock = (SettingView) findViewById(R.id.sv_setting_lock);
 		
 		updata();
 		changedbg();
@@ -102,10 +105,33 @@ public class SettingActivity extends Activity{
 	// 当Activity可见的时候执行
 	@Override
 	protected void onStart() {
-		// 当界面在后天运行，但是用户直接点击stopServer服务时的回显
+		super.onStart();
 		address();
 		blackNum();
-		super.onStart();
+		lock();
+		
+	}
+	// 开启软件锁
+	private void lock() {
+		if (AddressUtil.isRunningServer("com.example.mobilesafe.service.WatchDogService", getApplicationContext())){
+			sv_setting_lock.setChecked(true);
+		} else {
+			sv_setting_lock.setChecked(false);
+		}
+		sv_setting_lock.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(SettingActivity.this, WatchDogService.class);
+				if (sv_setting_lock.isChecked()) {
+					stopService(intent);
+					sv_setting_lock.setChecked(false);
+				} else {
+					startService(intent);
+					sv_setting_lock.setChecked(true);
+				}				
+			}
+		});		
 	}
 	// 黑名单拦截操作
 	private void blackNum() {
