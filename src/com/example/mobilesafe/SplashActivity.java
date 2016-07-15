@@ -119,8 +119,8 @@ public class SplashActivity extends Activity {
 			}.start();;
 		}
 		
-		copyDB();// copy database to app
-
+		copyDB("address.db");// copy address database to app
+		copyDB("antivirus.db");// copy address database to app
 //		Intent intent = new Intent(this, AddressService.class);
 //		startService(intent);
 		
@@ -148,18 +148,18 @@ public class SplashActivity extends Activity {
 	}
 
 	// Copy DataBase from asset
-	private void copyDB() {
+	private void copyDB(final String DBName) {
 		new Thread(){
 			@Override
 			public void run() {
 				super.run();
-				File file = new File(getFilesDir(), "address.db");
+				File file = new File(getFilesDir(), DBName);
 				if (!file.exists()) {
 					AssetManager assetManager = getAssets();
 					InputStream is = null;
 					FileOutputStream fos = null;
 					try{
-						is = assetManager.open("address.db");
+						is = assetManager.open(DBName);
 						fos = new FileOutputStream(file);
 						byte[] bt = new byte[1024];
 						int len = -1;

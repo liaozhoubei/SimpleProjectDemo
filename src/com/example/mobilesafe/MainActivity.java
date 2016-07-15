@@ -63,10 +63,19 @@ public class MainActivity extends Activity {
 					Intent taskManagerIntent = new Intent(MainActivity.this, TaskManagerActivity.class);
 					startActivity(taskManagerIntent);
 					break;
+				case 5:
+					Intent AntivirusIntent = new Intent(MainActivity.this, AntivirusActivity.class);
+					startActivity(AntivirusIntent);
+					break;
+				case 6:
+					Intent ClearCacheIntent = new Intent(MainActivity.this, ClearCacheActivity.class);
+					startActivity(ClearCacheIntent);
+					break;
 				case 7:
 					Intent AToolsIntent = new Intent(MainActivity.this, AToolsActivity.class);
 					startActivity(AToolsIntent);
 					break;
+
 				case 8:
 					Intent SettingIntent = new Intent(MainActivity.this, SettingActivity.class);
 					startActivity(SettingIntent);

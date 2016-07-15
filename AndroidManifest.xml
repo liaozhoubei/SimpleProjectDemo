@@ -30,6 +30,8 @@
     <uses-permission android:name="android.permission.GET_TASKS"/>
     <uses-permission android:name="android.permission.READ_SMS"/>
      <uses-permission android:name="android.permission.WRITE_SMS"/>
+     <uses-permission android:name="android.permission.GET_PACKAGE_SIZE"/>
+     <uses-permission android:name="android.permission.CLEAR_APP_CACHE"/>
 
     <application
         android:allowBackup="true"
@@ -64,6 +66,8 @@
         <activity android:name="com.example.mobilesafe.SoftMangaerActivity"/>
         <activity android:name="com.example.mobilesafe.TaskManagerActivity"/>
         <activity android:name="com.example.mobilesafe.AddressActivity" />
+        <activity android:name="com.example.mobilesafe.AntivirusActivity"/>
+        <activity android:name="com.example.mobilesafe.ClearCacheActivity"/>
         <activity android:name="com.example.mobilesafe.WatchDogActivity"
             android:launchMode="singleInstance"
             android:excludeFromRecents="true"/>
