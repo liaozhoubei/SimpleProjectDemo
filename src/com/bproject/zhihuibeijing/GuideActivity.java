@@ -29,6 +29,7 @@ public class GuideActivity extends Activity {
 	private GuideAdapter guideAdapter;
 	private ImageView iv_red_point;
 	private int mPointDis;
+	private OnPageChangeListener pageListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +85,7 @@ public class GuideActivity extends Activity {
 	}
 	
 	private void initListener() {
-		vp_guide.addOnPageChangeListener(new OnPageChangeListener() {
+		pageListener = new OnPageChangeListener() {
 			
 			@Override
 			public void onPageSelected(int position) {
@@ -111,7 +112,9 @@ public class GuideActivity extends Activity {
 				// TODO Auto-generated method stub
 				
 			}
-		});
+		};
+		
+		vp_guide.addOnPageChangeListener(pageListener);
 		
 		iv_red_point.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
 
@@ -153,5 +156,10 @@ public class GuideActivity extends Activity {
 		
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		vp_guide.removeOnPageChangeListener(pageListener);
+	}
 
 }
