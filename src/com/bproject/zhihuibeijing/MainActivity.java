@@ -7,6 +7,7 @@ import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
@@ -32,5 +33,12 @@ public class MainActivity extends SlidingFragmentActivity {
 		transaction.add(R.id.fl_left_menu, new LeftMenuFragment(), TAG_LEFT_MENU);
 		transaction.add(R.id.fl_main, new ContentFragment(), TAG_CONTENT);
 		transaction.commit();
+	}
+	
+	public LeftMenuFragment getLeftFragment(){
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		LeftMenuFragment leftFragment = (LeftMenuFragment) fragmentManager.findFragmentByTag(TAG_LEFT_MENU);
+		
+		return leftFragment;
 	}
 }

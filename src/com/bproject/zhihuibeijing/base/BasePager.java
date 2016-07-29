@@ -1,6 +1,8 @@
 package com.bproject.zhihuibeijing.base;
 
+import com.bproject.zhihuibeijing.MainActivity;
 import com.bproject.zhihuibeijing.R;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 import android.app.Activity;
 import android.view.View;
@@ -43,8 +45,9 @@ public class BasePager {
 	}
 	
 	private void toggle() {
-		// TODO Auto-generated method stub
-		
+		MainActivity mainActivity = (MainActivity) mActivity;
+		SlidingMenu slidingMenu = mainActivity.getSlidingMenu();
+		slidingMenu.toggle();
 	}
 
 	public void initData() {
