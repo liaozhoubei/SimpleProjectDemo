@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 import com.bproject.zhihuibeijing.MainActivity;
 import com.bproject.zhihuibeijing.R;
+import com.bproject.zhihuibeijing.base.imple.NewsCenterPager;
 import com.bproject.zhihuibeijing.domain.NewsMenu.NewsMenuData;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
+import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -36,6 +38,8 @@ public class LeftMenuFragment extends BaseFragment {
 	}
 	
 	public void setMenuData(ArrayList<NewsMenuData> data){
+		mCurrentPos = 0;//当前选中的位置归零
+		
 		mNewsMenuData = data;
 		mAdapter = new LeftMenuAdapter();
 		listview.setAdapter(mAdapter);
@@ -47,10 +51,23 @@ public class LeftMenuFragment extends BaseFragment {
 				mAdapter.notifyDataSetChanged();
 				// 开关侧滑
 				toggle();
+				setCurrentDetailPager(position);
 			}
 
 
+
+
 		});
+	}
+	/**
+	 * 点击侧边栏菜单时设置页面
+	 * @param position
+	 */
+	private void setCurrentDetailPager(int position) {
+		MainActivity mainActivity = (MainActivity) mActivity;
+		ContentFragment contentFragment = mainActivity.getContentFragment();
+		NewsCenterPager newsCenterPager = contentFragment.getNewsCenterPager();
+		newsCenterPager.setCurrentDetailPager(position);
 	}
 	
 	private void toggle() {

@@ -1,7 +1,14 @@
 package com.bproject.zhihuibeijing.base.imple;
 
+import java.util.ArrayList;
+
 import com.bproject.zhihuibeijing.MainActivity;
+import com.bproject.zhihuibeijing.base.BaseMenuDetailPager;
 import com.bproject.zhihuibeijing.base.BasePager;
+import com.bproject.zhihuibeijing.base.imple.menu.InteractMenuDetailPager;
+import com.bproject.zhihuibeijing.base.imple.menu.NewsMenuDetailPager;
+import com.bproject.zhihuibeijing.base.imple.menu.PhotosMenuDetailPager;
+import com.bproject.zhihuibeijing.base.imple.menu.TopicMenuDetailPager;
 import com.bproject.zhihuibeijing.domain.NewsMenu;
 import com.bproject.zhihuibeijing.fragment.LeftMenuFragment;
 import com.bproject.zhihuibeijing.global.GolbalConstants;
@@ -17,10 +24,14 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class NewsCenterPager extends BasePager {
+	private ArrayList<BaseMenuDetailPager> mMenuDetailPagers;// 菜单详情页集合
+	private NewsMenu mNewsData;
+	
 
 	public NewsCenterPager(Activity activity) {
 		super(activity);
@@ -75,12 +86,30 @@ public class NewsCenterPager extends BasePager {
 	
 	protected void processData(String json){
 		Gson gson = new Gson();
-		NewsMenu data = gson.fromJson(json, NewsMenu.class);
-		System.out.println("解析结果"+ data);
+		mNewsData = gson.fromJson(json, NewsMenu.class);
+		System.out.println("解析结果"+ mNewsData);
 		
 		MainActivity mainActivity = (MainActivity) mActivity;
 		LeftMenuFragment leftFragment = mainActivity.getLeftFragment();
-		leftFragment.setMenuData(data.data);
+		leftFragment.setMenuData(mNewsData.data);
+		
+		mMenuDetailPagers = new ArrayList<BaseMenuDetailPager>();
+		mMenuDetailPagers.add(new NewsMenuDetailPager(mActivity));
+		mMenuDetailPagers.add(new TopicMenuDetailPager(mActivity));
+		mMenuDetailPagers.add(new PhotosMenuDetailPager(mActivity));
+		mMenuDetailPagers.add(new InteractMenuDetailPager(mActivity));
+		
+		setCurrentDetailPager(0);
+	}
+
+	public void setCurrentDetailPager(int position) {
+		BaseMenuDetailPager baseMenuDetailPager = mMenuDetailPagers.get(position);
+		View view = baseMenuDetailPager.mRootView;
+		
+		flContent.removeAllViews();
+		baseMenuDetailPager.initData();
+		flContent.addView(view);
+		tvTitle.setText(mNewsData.data.get(position).title);
 	}
 
 }

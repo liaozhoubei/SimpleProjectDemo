@@ -158,4 +158,9 @@ public class ContentFragment extends BaseFragment {
 		}
 
 	}
+	// 获取新闻中心页面
+	public NewsCenterPager getNewsCenterPager(){
+		NewsCenterPager newsCenterPager = (NewsCenterPager) mPages.get(1);
+		return newsCenterPager;
+	}
 }
