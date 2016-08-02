@@ -18,14 +18,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class LeftMenuFragment extends BaseFragment {
-	ArrayList<NewsMenuData> mNewsMenuData;
+	private ArrayList<NewsMenuData> mNewsMenuData;
 	private ListView listview;
 	private int mCurrentPos;
 	private LeftMenuAdapter mAdapter;
 
 	@Override
 	public View initView() {
-		View view = View.inflate(mActivity, R.layout.fragment_leftmenu, null);
+		View view = View.inflate(mActivity, R.layout.fragment_left_menu, null);
 		listview = (ListView) view.findViewById(R.id.lv_list);
 		
 		return view;

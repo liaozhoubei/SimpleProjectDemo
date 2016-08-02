@@ -27,7 +27,9 @@
             </intent-filter>
         </activity>
         <activity android:name="com.bproject.zhihuibeijing.GuideActivity" />
-        <activity android:name="com.bproject.zhihuibeijing.MainActivity" />
+        <activity android:name="com.bproject.zhihuibeijing.MainActivity" 
+            android:theme="@style/Theme.PageIndicatorDefaults" />
+        <activity android:name="com.bproject.zhihuibeijing.NewsDetailActivity"/>
     </application>
 
 </manifest>
