@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class BasePager {
@@ -17,6 +18,7 @@ public class BasePager {
 	public TextView tvTitle;
 	public ImageButton btnMenu;
 	public FrameLayout flContent;// 空的帧布局对象, 要动态添加布局
+	public ImageButton btn_photo;
 
 	public View mRootView;// 当前页面的布局对象
 
@@ -29,6 +31,7 @@ public class BasePager {
 		View view = View.inflate(mActivity, R.layout.base_pager, null);
 		tvTitle = (TextView) view.findViewById(R.id.tv_title);
 		btnMenu = (ImageButton) view.findViewById(R.id.btn_menu);
+		btn_photo = (ImageButton) view.findViewById(R.id.btn_photo);
 		flContent = (FrameLayout) view.findViewById(R.id.fl_content);
 
 		btnMenu.setOnClickListener(new OnClickListener() {

@@ -65,11 +65,13 @@ public class NewsDetailActivity extends Activity implements OnClickListener {
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				pb_loading.setVisibility(View.VISIBLE);
+				System.out.println("正在加载网页");
 				super.onPageStarted(view, url, favicon);
 			}
 
 			@Override
 			public void onPageFinished(WebView view, String url) {
+				System.out.println("网页加载完成");
 				pb_loading.setVisibility(View.INVISIBLE);
 				super.onPageFinished(view, url);
 			}
@@ -87,6 +89,7 @@ public class NewsDetailActivity extends Activity implements OnClickListener {
 			@Override
 			public void onProgressChanged(WebView view, int newProgress) {
 				// 获取当前网页加载进度，可用于更新进度条
+				System.out.println("网页加载进度" + newProgress);
 				super.onProgressChanged(view, newProgress);
 			}
 

@@ -27,10 +27,13 @@ import com.viewpagerindicator.CirclePageIndicator;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -53,6 +56,7 @@ public class TabDetailPager extends BaseMenuDetailPager {
 	private ArrayList<NewsData> mNewsList;
 	private NewsAdapter newsAdapter;
 	private String mMoreUrl;
+	private Handler mHandler;
 
 	public TabDetailPager(Activity mActivity, NewsTabData newsTabData) {
 		super(mActivity);
@@ -97,31 +101,31 @@ public class TabDetailPager extends BaseMenuDetailPager {
 			}
 
 		});
-		
+
 		lv_list.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				int headerViewsCount = lv_list.getHeaderViewsCount();
 				position = position - headerViewsCount;
-				
+
 				NewsData newsData = mNewsList.get(position);
 				String readIds = PrefUtils.getString(mActivity, "read_ids", "");
-				
-				if (!readIds.contains(newsData.id + "")){
+
+				if (!readIds.contains(newsData.id + "")) {
 					readIds = readIds + newsData.id + ",";
 					PrefUtils.setString(mActivity, "read_ids", readIds);
 				}
-				
+
 				TextView tv_title = (TextView) view.findViewById(R.id.tv_title);
 				tv_title.setTextColor(Color.GRAY);
-				
+
 				Intent intent = new Intent(mActivity, NewsDetailActivity.class);
 				intent.putExtra("URL", newsData.url);
 				mActivity.startActivity(intent);
 			}
 		});
-		
+
 		return view;
 	}
 
@@ -144,14 +148,14 @@ public class TabDetailPager extends BaseMenuDetailPager {
 			public void onSuccess(ResponseInfo<String> responseInfo) {
 				String result = responseInfo.result;
 				processData(result, true);
-				 lv_list.onRefreshComplete(true);
+				lv_list.onRefreshComplete(true);
 			}
 
 			@Override
 			public void onFailure(HttpException error, String msg) {
 				error.printStackTrace();
 				Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
-				 lv_list.onRefreshComplete(false);
+				lv_list.onRefreshComplete(false);
 			}
 		});
 	}
@@ -231,6 +235,49 @@ public class TabDetailPager extends BaseMenuDetailPager {
 
 				// System.out.println("这个是新闻列表" + mNewsList.get(0).listimage);
 			}
+
+			if (mHandler == null) {
+				// 实现轮播图自动轮询
+				mHandler = new Handler() {
+					public void handleMessage(android.os.Message msg) {
+						int currentItem = mViewPager.getCurrentItem();
+						currentItem++;
+						if (currentItem > mTopNews.size() - 1) {
+							currentItem = 0; // 当条目大于轮播图的个数是，自动归0
+						}
+
+						mViewPager.setCurrentItem(currentItem);
+						mHandler.sendEmptyMessageDelayed(0, 3000);
+					};
+				};
+				mHandler.sendEmptyMessageDelayed(0, 3000);
+				// 实现按住轮播图时停止轮询
+				mViewPager.setOnTouchListener(new OnTouchListener() {
+
+					@Override
+					public boolean onTouch(View v, MotionEvent event) {
+						switch (event.getAction()) {
+						case MotionEvent.ACTION_DOWN:
+							// 移除所有回调方法和消息
+							mHandler.removeCallbacksAndMessages(null);
+							break;
+						case MotionEvent.ACTION_CANCEL:
+							// 当按下Viewpager轮播图却上下滑动会执行ACTION_CANCEL，若不做处理，会造成轮播图不在轮换
+							mHandler.sendEmptyMessageDelayed(0, 3000);
+							break;
+						case MotionEvent.ACTION_UP:
+							// 重新发消息轮询
+							mHandler.sendEmptyMessageDelayed(0, 3000);
+							break;
+
+						default:
+							break;
+						}
+						return false;
+					}
+				});
+			}
+
 		} else {
 			ArrayList<NewsData> more = newsTabBean.data.news;
 			mNewsList.addAll(more);
@@ -316,14 +363,14 @@ public class TabDetailPager extends BaseMenuDetailPager {
 			NewsData news = mNewsList.get(position);
 			holder.tvTitle.setText(news.title);
 			holder.tvDate.setText(news.pubdate);
-			
+
 			String readIds = PrefUtils.getString(mActivity, "read_ids", "");
-			if (readIds.contains(news.id + "")){
+			if (readIds.contains(news.id + "")) {
 				holder.tvTitle.setTextColor(Color.GRAY);
 			} else {
 				holder.tvTitle.setTextColor(Color.BLACK);
 			}
-			
+
 			mBitmapUtils.display(holder.ivIcon, news.listimage);
 
 			return convertView;

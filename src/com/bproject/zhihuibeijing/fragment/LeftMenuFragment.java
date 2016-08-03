@@ -51,6 +51,7 @@ public class LeftMenuFragment extends BaseFragment {
 				mAdapter.notifyDataSetChanged();
 				// 开关侧滑
 				toggle();
+				// 更新页面内容
 				setCurrentDetailPager(position);
 			}
 
