@@ -11,6 +11,7 @@ import com.bproject.zhihuibeijing.domain.NewsTabBean.NewsData;
 import com.bproject.zhihuibeijing.domain.NewsTabBean.TopNews;
 import com.bproject.zhihuibeijing.global.GolbalConstants;
 import com.bproject.zhihuibeijing.utils.CacheUtils;
+import com.bproject.zhihuibeijing.utils.MyBitmapUtils;
 import com.bproject.zhihuibeijing.utils.PrefUtils;
 import com.bproject.zhihuibeijing.view.PullToRefreshListView;
 import com.bproject.zhihuibeijing.view.PullToRefreshListView.OnRefreshListener;
@@ -291,8 +292,10 @@ public class TabDetailPager extends BaseMenuDetailPager {
 		private BitmapUtils mBitmapUtils;
 
 		public TopNewsAdapter() {
+			
 			mBitmapUtils = new BitmapUtils(mActivity);
 			mBitmapUtils.configDefaultLoadingImage(R.drawable.topnews_item_default);
+			
 		}
 
 		@Override

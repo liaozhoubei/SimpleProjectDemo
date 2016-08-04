@@ -8,6 +8,7 @@ import com.bproject.zhihuibeijing.domain.PhotoBean;
 import com.bproject.zhihuibeijing.domain.PhotoBean.PhotoNews;
 import com.bproject.zhihuibeijing.global.GolbalConstants;
 import com.bproject.zhihuibeijing.utils.CacheUtils;
+import com.bproject.zhihuibeijing.utils.MyBitmapUtils;
 import com.google.gson.Gson;
 import com.lidroid.xutils.BitmapUtils;
 import com.lidroid.xutils.HttpUtils;
@@ -101,11 +102,13 @@ public class PhotosMenuDetailPager extends BaseMenuDetailPager implements OnClic
 
 
 	private class PhotoAdapter extends BaseAdapter{
-		private BitmapUtils bitmapUtils;
+//		private BitmapUtils bitmapUtils;
+		private MyBitmapUtils bitmapUtils;
 		
 		public PhotoAdapter() {
-			bitmapUtils = new BitmapUtils(mActivity);
-			bitmapUtils.configDefaultLoadingImage(R.drawable.pic_item_list_default);
+//			bitmapUtils = new BitmapUtils(mActivity);
+//			bitmapUtils.configDefaultLoadingImage(R.drawable.pic_item_list_default);
+			bitmapUtils = new MyBitmapUtils();
 		}
 
 		@Override
