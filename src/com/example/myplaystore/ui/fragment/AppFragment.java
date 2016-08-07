@@ -15,7 +15,7 @@ public class AppFragment extends BaseFragment {
 	@Override
 	public ResultState onLoad() {
 		// TODO Auto-generated method stub
-		return null;
+		return ResultState.STATE_ERROR;
 	}
 
 }

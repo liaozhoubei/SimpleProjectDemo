@@ -1,6 +1,10 @@
-package com.example.myplaystore;
+package com.example.myplaystore.ui.activity;
 
-import com.example.myplaystore.ui.BaseActivity;
+import com.example.myplaystore.R;
+import com.example.myplaystore.R.array;
+import com.example.myplaystore.R.drawable;
+import com.example.myplaystore.R.id;
+import com.example.myplaystore.R.layout;
 import com.example.myplaystore.ui.fragment.BaseFragment;
 import com.example.myplaystore.ui.fragment.FragmentFactory;
 import com.example.myplaystore.ui.view.PagerTab;

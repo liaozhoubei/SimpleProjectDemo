@@ -2,7 +2,7 @@ package com.example.myplaystore.ui.view;
 
 
 import com.example.myplaystore.R;
-import com.example.myplaystore.ui.BaseActivity;
+import com.example.myplaystore.ui.activity.BaseActivity;
 import com.example.myplaystore.utils.UIUtils;
 
 import android.content.Context;

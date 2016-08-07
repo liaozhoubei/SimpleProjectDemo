@@ -1,4 +1,4 @@
-package com.example.myplaystore.ui;
+package com.example.myplaystore.ui.activity;
 
 import android.support.v7.app.ActionBarActivity;
 

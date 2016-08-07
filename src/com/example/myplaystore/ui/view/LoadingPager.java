@@ -80,7 +80,7 @@ public abstract class LoadingPager extends FrameLayout {
 		}
 		
 		if (mSuccessPager != null) {
-			mSuccessPager.setVisibility(mCurrentState == STATE_LOAD_SUCCESS ? View.INVISIBLE : View.GONE);
+			mSuccessPager.setVisibility(mCurrentState == STATE_LOAD_SUCCESS ? View.VISIBLE : View.GONE);
 		}
 		
 	}
@@ -104,14 +104,10 @@ public abstract class LoadingPager extends FrameLayout {
 			}
 		}.start();
 	}
-//	
-//	private static final int STATE_LOAD_ERROR = 3;// 加载失败
-//	private static final int STATE_LOAD_EMPTY = 4;// 数据为空
-//	private static final int STATE_LOAD_SUCCESS = 5;// 加载成功
+
 	
 	public enum ResultState{
-		STATE_SUCCESS(STATE_LOAD_ERROR), STATE_EMPTY(STATE_LOAD_EMPTY), STATE_ERROR(STATE_LOAD_SUCCESS);
-		
+		STATE_SUCCESS(STATE_LOAD_SUCCESS), STATE_EMPTY(STATE_LOAD_EMPTY), STATE_ERROR(STATE_LOAD_ERROR);
 		private int state;
 		private ResultState(int state) {
 			this.state = state;

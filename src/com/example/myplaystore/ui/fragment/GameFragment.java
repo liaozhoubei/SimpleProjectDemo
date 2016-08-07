@@ -13,7 +13,6 @@ public class GameFragment extends BaseFragment {
 
 	@Override
 	public ResultState onLoad() {
-		// TODO Auto-generated method stub
-		return null;
+		return ResultState.STATE_EMPTY;
 	}
 }
