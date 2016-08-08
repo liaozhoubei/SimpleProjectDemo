@@ -19,7 +19,7 @@ public abstract class BaseHolder<T> {
 	public abstract View initView();
 	
 	
-	public View getView(){
+	public View getRootView(){
 		return mRootView;
 	}
 	

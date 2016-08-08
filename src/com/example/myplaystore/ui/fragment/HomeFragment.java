@@ -3,18 +3,15 @@ package com.example.myplaystore.ui.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.myplaystore.R;
 import com.example.myplaystore.ui.MyBaseAdapter;
 import com.example.myplaystore.ui.holder.BaseHolder;
 import com.example.myplaystore.ui.holder.HomeHolder;
 import com.example.myplaystore.ui.view.LoadingPager.ResultState;
 import com.example.myplaystore.utils.UIUtils;
 
+import android.os.SystemClock;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class HomeFragment extends BaseFragment {
 	private ListView listView;
@@ -52,6 +49,17 @@ public class HomeFragment extends BaseFragment {
 		@Override
 		public BaseHolder<String> getHolder() {
 			return new HomeHolder();
+		}
+
+		@Override
+		public ArrayList<String> onLoadMore() {
+			 ArrayList<String> moreData = new ArrayList<String>();
+			 for(int i=0;i<20;i++) {
+			 moreData.add("测试更多数据:" + i);
+			 }
+			
+			 SystemClock.sleep(2000);
+			return moreData;
 		}
 		
 	}
