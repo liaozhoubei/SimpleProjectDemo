@@ -6,6 +6,7 @@ import com.example.myplaystore.utils.UIUtils;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 public abstract class LoadingPager extends FrameLayout {
@@ -45,6 +46,14 @@ public abstract class LoadingPager extends FrameLayout {
 		
 		if (mErrorPage == null) {
 			mErrorPage = UIUtils.getView(R.layout.page_error);
+			Button btn_retry = (Button) mErrorPage.findViewById(R.id.btn_retry);
+			btn_retry.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					loadData();
+				}
+			});
 			addView(mErrorPage);
 		}
 		
@@ -53,9 +62,6 @@ public abstract class LoadingPager extends FrameLayout {
 			mEmptyPager = UIUtils.getView(R.layout.page_empty);
 			addView(mEmptyPager);
 		}
-		
-		
-		
 		
 		showRightPager();
 		

@@ -8,8 +8,6 @@ public abstract class BaseHolder<T> {
 	
 	private T data;
 	
-	
-	
 	public BaseHolder() {
 		super();
 		mRootView = initView();

@@ -3,65 +3,69 @@ package com.example.myplaystore.ui.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.myplaystore.domain.AppInfo;
+import com.example.myplaystore.http.protocol.HomeProtocol;
 import com.example.myplaystore.ui.MyBaseAdapter;
 import com.example.myplaystore.ui.holder.BaseHolder;
 import com.example.myplaystore.ui.holder.HomeHolder;
+import com.example.myplaystore.ui.view.MyListView;
 import com.example.myplaystore.ui.view.LoadingPager.ResultState;
 import com.example.myplaystore.utils.UIUtils;
 
-import android.os.SystemClock;
+import android.R.color;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.widget.ListView;
 
 public class HomeFragment extends BaseFragment {
-	private ListView listView;
-	private List<String> list;
+	private MyListView listView;
+//	private List<String> list;
+	private List<AppInfo> data;
 
 	@Override
 	public View onCreateSuccessView() {
-//		TextView text = new TextView(UIUtils.getContext());
-//		System.out.println("这里被调用了吗");
-//		text.setText(getClass().getSimpleName());
 		
-		listView = new ListView(UIUtils.getContext());
+		listView = new MyListView(UIUtils.getContext());
 		
-		list = new ArrayList<String>();
-		for (int i = 0; i < 20; i++) {
-			list.add("我是第一代的数据");
-		}
-		
-		listView.setAdapter(new HomeAdapter(list));
+//		listView.setSelector(new ColorDrawable());
+//		listView.setDivider(null);
+//		listView.setCacheColorHint(Color.TRANSPARENT);
+		listView.setAdapter(new HomeAdapter(data));
 		return listView;
 	}
 
 	@Override
 	public ResultState onLoad() {
-		return ResultState.STATE_SUCCESS;
+		
+		HomeProtocol homeProtocol = new HomeProtocol();
+		data = homeProtocol.getData(0);
+		// 传入json
+		return check(data);
 	}
 	
-	
-	private class HomeAdapter extends MyBaseAdapter<String>{
+	private class HomeAdapter extends MyBaseAdapter<AppInfo>{
 
-		public HomeAdapter(List<String> data) {
+		public HomeAdapter(List<AppInfo> data) {
 			super(data);
 		}
 		
 		@Override
-		public BaseHolder<String> getHolder() {
+		public BaseHolder<AppInfo> getHolder() {
 			return new HomeHolder();
 		}
 
 		@Override
-		public ArrayList<String> onLoadMore() {
-			 ArrayList<String> moreData = new ArrayList<String>();
-			 for(int i=0;i<20;i++) {
-			 moreData.add("测试更多数据:" + i);
-			 }
+		public ArrayList<AppInfo> onLoadMore() {
+
 			
-			 SystemClock.sleep(2000);
+			HomeProtocol homeProtocol = new HomeProtocol();
+			ArrayList<AppInfo> moreData = homeProtocol.getData(getListSize());
+			
 			return moreData;
 		}
 		
 	}
+	
 
 }

@@ -20,7 +20,7 @@ public abstract class BaseProtocol<T> {
 	public T getData(int index){
 		String result = getCache(index);
 		if (StringUtils.isEmpty(result)) {
-			getDataFromServar(index);
+			result = getDataFromServar(index);
 		}
 		
 		if (result != null) {
@@ -35,7 +35,10 @@ public abstract class BaseProtocol<T> {
 		HttpResult httpResult = HttpHelper.get(HttpHelper.URL + getKey() + "?index=" + index + getParims());
 		if (httpResult != null) {
 			String string = httpResult.getString();
-			System.out.println(string);
+//			System.out.println(string);
+			if (!StringUtils.isEmpty(string)) {
+				setCache(index, string);
+			}
 			return string;
 		}
 		return null;
@@ -47,6 +50,7 @@ public abstract class BaseProtocol<T> {
 	
 	public void setCache(int index, String json){
 		File cacheDir = UIUtils.getContext().getCacheDir(); // 本应用的缓存文件
+		System.out.println("缓存目录" + cacheDir.toString());
 		File cacheFile = new File(cacheDir, getKey() + "?index=" + index + getParims());
 		FileWriter fileWriter = null;
 		try {
@@ -68,8 +72,7 @@ public abstract class BaseProtocol<T> {
 	public String getCache(int index){
 		File cacheDir = UIUtils.getContext().getCacheDir(); // 本应用的缓存文件
 		File cacheFile = new File(cacheDir, getKey() + "?index=" + index + getParims());
-		
-		if (cacheFile != null) {
+		if (cacheFile.exists()) {
 			BufferedReader bufferedReader = null;
 			try {
 				bufferedReader = new BufferedReader(new FileReader(cacheFile));

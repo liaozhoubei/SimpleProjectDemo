@@ -12,13 +12,11 @@ public class HomeProtocol extends BaseProtocol<ArrayList<AppInfo>> {
 
 	@Override
 	public String getKey() {
-		// TODO Auto-generated method stub
 		return "home";
 	}
 
 	@Override
 	public String getParims() {
-		// TODO Auto-generated method stub
 		return "";
 	}
 

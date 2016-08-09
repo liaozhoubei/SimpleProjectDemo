@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-public class HomeHolder extends BaseHolder<AppInfo> {
+public class AppHolder extends BaseHolder<AppInfo> {
 
 	private ImageView iv_icon;
 	private TextView tv_name;
@@ -40,6 +40,7 @@ public class HomeHolder extends BaseHolder<AppInfo> {
 		rb_star.setRating(data.stars);
 		tv_des.setText(data.des);
 		tv_size.setText(data.size + "");
+		
 		bitmapUtils.display(iv_icon, HttpHelper.URL + "image?name=" + data.iconUrl);
 		
 	}
