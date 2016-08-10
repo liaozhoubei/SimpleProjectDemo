@@ -14,8 +14,8 @@ import android.widget.Toast;
 
 public abstract class MyBaseAdapter<T> extends BaseAdapter {
 
-	private static final int TYPE_NORMAL = 0;
-	private static final int TYPE_MORE = 1;
+	private static final int TYPE_NORMAL = 1;
+	private static final int TYPE_MORE = 0;
 
 	private List<T> data;
 
@@ -49,12 +49,12 @@ public abstract class MyBaseAdapter<T> extends BaseAdapter {
 		if (position == data.size() - 1) {
 			return TYPE_MORE;
 		} else {
-			return getInnerType();
+			return getInnerType(position);
 		}
 	}
 
 	// 公开的方法，方便以后让子类可重写此方法更改返回的类型
-	public int getInnerType() {
+	public int getInnerType(int position) {
 		return TYPE_NORMAL;
 	}
 
