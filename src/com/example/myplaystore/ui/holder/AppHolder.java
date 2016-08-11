@@ -23,7 +23,7 @@ public class AppHolder extends BaseHolder<AppInfo> {
 
 	@Override
 	public View initView() {
-		View view = UIUtils.getView(R.layout.list_item_home);
+		View view = UIUtils.inflate(R.layout.list_item_home);
 		iv_icon = (ImageView) view.findViewById(R.id.iv_icon);
 		tv_name = (TextView) view.findViewById(R.id.tv_name);
 		rb_star = (RatingBar) view.findViewById(R.id.rb_star);

@@ -24,7 +24,7 @@ public class MoreHolder extends BaseHolder<Integer> {
 
 	@Override
 	public View initView() {
-		View view = UIUtils.getView(R.layout.list_item_more);
+		View view = UIUtils.inflate(R.layout.list_item_more);
 		ll_load_more = (LinearLayout) view.findViewById(R.id.ll_load_more);
 		tv_load_error = (TextView) view.findViewById(R.id.tv_load_error);
 		return view;
@@ -40,10 +40,10 @@ public class MoreHolder extends BaseHolder<Integer> {
 
 		case STATE_MORE_ERROR:
 			ll_load_more.setVisibility(View.GONE);
-			tv_load_error.setVisibility(View.GONE);
+			tv_load_error.setVisibility(View.VISIBLE);
 			break;
 		case STATE_MORE_NONE:
-			ll_load_more.setVisibility(View.VISIBLE);
+			ll_load_more.setVisibility(View.GONE);
 			tv_load_error.setVisibility(View.GONE);
 			break;
 		default:

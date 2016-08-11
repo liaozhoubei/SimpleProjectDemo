@@ -7,6 +7,8 @@ import com.example.myplaystore.domain.CategoryInfo;
 import com.example.myplaystore.http.protocol.CategoryProtocol;
 import com.example.myplaystore.ui.MyBaseAdapter;
 import com.example.myplaystore.ui.holder.BaseHolder;
+import com.example.myplaystore.ui.holder.CategoryHolder;
+import com.example.myplaystore.ui.holder.TitleHolder;
 import com.example.myplaystore.ui.view.MyListView;
 import com.example.myplaystore.ui.view.LoadingPager.ResultState;
 import com.example.myplaystore.utils.UIUtils;
@@ -15,7 +17,7 @@ import android.view.View;
 
 public class CategoryFragment extends BaseFragment {
 
-	private List<CategoryInfo> data;
+	private ArrayList<CategoryInfo> data;
 
 	@Override
 	public View onCreateSuccessView() {
@@ -39,16 +41,22 @@ public class CategoryFragment extends BaseFragment {
 			// TODO Auto-generated constructor stub
 		}
 
+	
+		
 		@Override
-		public BaseHolder<CategoryInfo> getHolder() {
-			// TODO Auto-generated method stub
-			return null;
+		public BaseHolder<CategoryInfo> getHolder(int position) {
+			CategoryInfo categoryInfo = data.get(position);
+			if (categoryInfo.isTitle){
+				return new TitleHolder();
+			} else {
+				return new CategoryHolder();
+			}
+			
 		}
 		
 		@Override
-		public int getItemViewType(int position) {
-			// TODO Auto-generated method stub
-			return super.getItemViewType(position) + 1;
+		public int getViewTypeCount() {
+			return super.getViewTypeCount() + 1;// 在原来基础上增加一种标题类型
 		}
 		
 		@Override
@@ -63,6 +71,7 @@ public class CategoryFragment extends BaseFragment {
 			}
 			
 		}
+		
 		
 		// 禁用加载更多
 		@Override

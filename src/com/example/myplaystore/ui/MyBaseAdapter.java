@@ -26,7 +26,7 @@ public abstract class MyBaseAdapter<T> extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		return data.size();
+		return data.size() + 1;
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public abstract class MyBaseAdapter<T> extends BaseAdapter {
 
 	@Override
 	public int getItemViewType(int position) {
-		if (position == data.size() - 1) {
+		if (position == getCount() - 1) {
 			return TYPE_MORE;
 		} else {
 			return getInnerType(position);
@@ -66,7 +66,7 @@ public abstract class MyBaseAdapter<T> extends BaseAdapter {
 			if (getItemViewType(position) == TYPE_MORE) {
 				baseHolder = new MoreHolder(hasMore());
 			} else {
-				baseHolder = getHolder();
+				baseHolder = getHolder(position);
 			}
 		} else {
 			baseHolder = (BaseHolder) convertView.getTag();
@@ -89,7 +89,7 @@ public abstract class MyBaseAdapter<T> extends BaseAdapter {
 		return true;
 	}
 
-	public abstract BaseHolder<T> getHolder();
+	public abstract BaseHolder<T> getHolder(int position);
 
 	private boolean isLoading = false;
 
@@ -135,3 +135,4 @@ public abstract class MyBaseAdapter<T> extends BaseAdapter {
 		return data.size();
 	}
 }
+

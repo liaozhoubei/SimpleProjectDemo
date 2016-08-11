@@ -20,7 +20,7 @@ public class SubjectHolder extends BaseHolder<SubjectInfo> {
 
 	@Override
 	public View initView() {
-		View view = UIUtils.getView(R.layout.list_item_subject);
+		View view = UIUtils.inflate(R.layout.list_item_subject);
 		iv_pic = (ImageView) view.findViewById(R.id.iv_pic);
 		tv_title = (TextView) view.findViewById(R.id.tv_title);
 		bitmapUtils = BitmapHelper.getBitmapUtils();

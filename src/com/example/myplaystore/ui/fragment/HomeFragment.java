@@ -7,6 +7,7 @@ import com.example.myplaystore.domain.AppInfo;
 import com.example.myplaystore.http.protocol.HomeProtocol;
 import com.example.myplaystore.ui.MyBaseAdapter;
 import com.example.myplaystore.ui.holder.BaseHolder;
+import com.example.myplaystore.ui.holder.HomeHeaderHolder;
 import com.example.myplaystore.ui.holder.HomeHolder;
 import com.example.myplaystore.ui.view.MyListView;
 import com.example.myplaystore.ui.view.LoadingPager.ResultState;
@@ -22,6 +23,7 @@ public class HomeFragment extends BaseFragment {
 	private MyListView listView;
 //	private List<String> list;
 	private List<AppInfo> data;
+	private ArrayList<String> pictures;
 
 	@Override
 	public View onCreateSuccessView() {
@@ -31,7 +33,15 @@ public class HomeFragment extends BaseFragment {
 //		listView.setSelector(new ColorDrawable());
 //		listView.setDivider(null);
 //		listView.setCacheColorHint(Color.TRANSPARENT);
+		
+		HomeHeaderHolder headerHolder = new HomeHeaderHolder();
+		
+		listView.addHeaderView(headerHolder.getRootView());
 		listView.setAdapter(new HomeAdapter(data));
+		if (pictures != null) {
+			
+			headerHolder.setData(pictures);
+		}
 		return listView;
 	}
 
@@ -40,6 +50,7 @@ public class HomeFragment extends BaseFragment {
 		
 		HomeProtocol homeProtocol = new HomeProtocol();
 		data = homeProtocol.getData(0);
+		pictures = homeProtocol.getPictures();
 		// 传入json
 		return check(data);
 	}
@@ -51,7 +62,7 @@ public class HomeFragment extends BaseFragment {
 		}
 		
 		@Override
-		public BaseHolder<AppInfo> getHolder() {
+		public BaseHolder<AppInfo> getHolder(int position) {
 			return new HomeHolder();
 		}
 

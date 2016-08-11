@@ -40,12 +40,12 @@ public abstract class LoadingPager extends FrameLayout {
 
 	private void initView() {
 		if (mLoadingPager == null) {
-			mLoadingPager = UIUtils.getView(R.layout.page_loading);
+			mLoadingPager = UIUtils.inflate(R.layout.page_loading);
 			addView(mLoadingPager);
 		}
 		
 		if (mErrorPage == null) {
-			mErrorPage = UIUtils.getView(R.layout.page_error);
+			mErrorPage = UIUtils.inflate(R.layout.page_error);
 			Button btn_retry = (Button) mErrorPage.findViewById(R.id.btn_retry);
 			btn_retry.setOnClickListener(new OnClickListener() {
 				
@@ -59,7 +59,7 @@ public abstract class LoadingPager extends FrameLayout {
 		
 		
 		if (mEmptyPager == null) {
-			mEmptyPager = UIUtils.getView(R.layout.page_empty);
+			mEmptyPager = UIUtils.inflate(R.layout.page_empty);
 			addView(mEmptyPager);
 		}
 		

@@ -58,7 +58,7 @@ public class UIUtils {
 		return px / density;
 	}
 	
-	public static View getView(int id) {
+	public static View inflate(int id) {
 		return View.inflate(getContext(), id, null);
 	}
 	

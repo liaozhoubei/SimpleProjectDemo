@@ -42,7 +42,7 @@ public class CategoryProtocol extends BaseProtocol<ArrayList<CategoryInfo>> {
 				if (jsonObject.has("infos")) {
 					JSONArray jsonInfos = jsonObject.getJSONArray("infos");
 					
-					for (int j = 0; j < jsonArray.length(); j ++) {
+					for (int j = 0; j < jsonInfos.length(); j ++) {
 						JSONObject jsonObject2 = jsonInfos.getJSONObject(j);
 						CategoryInfo info = new CategoryInfo();
 						info.name1 = jsonObject2.getString("name1");
@@ -52,6 +52,7 @@ public class CategoryProtocol extends BaseProtocol<ArrayList<CategoryInfo>> {
 						info.url2 = jsonObject2.getString("url2");
 						info.url3 = jsonObject2.getString("url3");
 						info.isTitle = false;
+						System.out.println("图片1的地址：" + info.url1);
 						
 						list.add(info);
 					}
@@ -60,7 +61,7 @@ public class CategoryProtocol extends BaseProtocol<ArrayList<CategoryInfo>> {
 			}
 			
 			return list;
-			
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
