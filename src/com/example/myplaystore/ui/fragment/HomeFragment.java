@@ -6,18 +6,18 @@ import java.util.List;
 import com.example.myplaystore.domain.AppInfo;
 import com.example.myplaystore.http.protocol.HomeProtocol;
 import com.example.myplaystore.ui.MyBaseAdapter;
+import com.example.myplaystore.ui.activity.HomeDetailActivity;
 import com.example.myplaystore.ui.holder.BaseHolder;
 import com.example.myplaystore.ui.holder.HomeHeaderHolder;
 import com.example.myplaystore.ui.holder.HomeHolder;
-import com.example.myplaystore.ui.view.MyListView;
 import com.example.myplaystore.ui.view.LoadingPager.ResultState;
+import com.example.myplaystore.ui.view.MyListView;
 import com.example.myplaystore.utils.UIUtils;
 
-import android.R.color;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.content.Intent;
 import android.view.View;
-import android.widget.ListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class HomeFragment extends BaseFragment {
 	private MyListView listView;
@@ -42,6 +42,14 @@ public class HomeFragment extends BaseFragment {
 			
 			headerHolder.setData(pictures);
 		}
+		
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				startActivity(new Intent(UIUtils.getContext(), HomeDetailActivity.class));
+			}
+		});
 		return listView;
 	}
 

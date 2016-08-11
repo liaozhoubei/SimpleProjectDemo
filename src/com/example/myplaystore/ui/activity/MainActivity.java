@@ -1,16 +1,13 @@
 package com.example.myplaystore.ui.activity;
 
 import com.example.myplaystore.R;
-import com.example.myplaystore.R.array;
-import com.example.myplaystore.R.drawable;
-import com.example.myplaystore.R.id;
-import com.example.myplaystore.R.layout;
 import com.example.myplaystore.ui.fragment.BaseFragment;
 import com.example.myplaystore.ui.fragment.FragmentFactory;
 import com.example.myplaystore.ui.view.PagerTab;
 import com.example.myplaystore.utils.UIUtils;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -79,7 +76,7 @@ public class MainActivity extends BaseActivity {
 		}
 
 		@Override
-		public android.support.v4.app.Fragment getItem(int position) {
+		public Fragment getItem(int position) {
 			BaseFragment createFragment = FragmentFactory.createFragment(position);
 			return createFragment;
 		}
