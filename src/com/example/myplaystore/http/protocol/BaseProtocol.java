@@ -1,13 +1,15 @@
 package com.example.myplaystore.http.protocol;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import org.apache.http.HttpRequest;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import com.example.myplaystore.http.HttpHelper;
 import com.example.myplaystore.http.HttpHelper.HttpResult;
@@ -33,14 +35,17 @@ public abstract class BaseProtocol<T> {
 
 	private String getDataFromServar(int index) {
 		HttpResult httpResult = HttpHelper.get(HttpHelper.URL + getKey() + "?index=" + index + getParims());
+		System.out.println("链接地址正确么" + HttpHelper.URL + getKey() + "?index=" + index + getParims());
+		System.out.println("baseProtocol：  " + httpResult);
 		if (httpResult != null) {
 			String string = httpResult.getString();
-//			System.out.println(string);
+			System.out.println(string);
 			if (!StringUtils.isEmpty(string)) {
 				setCache(index, string);
 			}
 			return string;
-		}
+		}	
+		
 		return null;
 	}
 	

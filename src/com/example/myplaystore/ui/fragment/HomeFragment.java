@@ -47,7 +47,14 @@ public class HomeFragment extends BaseFragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				startActivity(new Intent(UIUtils.getContext(), HomeDetailActivity.class));
+				Intent intent = new Intent(UIUtils.getContext(), HomeDetailActivity.class);
+				AppInfo appInfo = data.get(position - 1);
+				if (appInfo != null) {
+					String packageName = appInfo.packageName;
+					
+					intent.putExtra("packageName", packageName);
+				}
+				startActivity(intent);
 			}
 		});
 		return listView;
