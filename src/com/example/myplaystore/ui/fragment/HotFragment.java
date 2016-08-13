@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.example.myplaystore.http.protocol.HotProtocol;
 import com.example.myplaystore.ui.view.FlowLayout;
+import com.example.myplaystore.ui.view.MyFlowLayout;
 import com.example.myplaystore.ui.view.LoadingPager.ResultState;
 import com.example.myplaystore.ui.view.fly.DrawableUtils;
 import com.example.myplaystore.utils.UIUtils;
@@ -33,11 +34,12 @@ public class HotFragment extends BaseFragment {
 		
 		ScrollView scrollView = new ScrollView(UIUtils.getContext());
 		
-		FlowLayout flow = new FlowLayout(UIUtils.getContext());
+//		FlowLayout flow = new FlowLayout(UIUtils.getContext());
+		MyFlowLayout flow = new MyFlowLayout(UIUtils.getContext());
 		int padding = UIUtils.dip2px(10);
-		flow.setPadding(padding, padding, padding, padding);
-		flow.setHorizontalSpacing(UIUtils.dip2px(4));
-		flow.setVerticalSpacing(UIUtils.dip2px(4));
+//		flow.setPadding(padding, padding, padding, padding);
+//		flow.setHorizontalSpacing(UIUtils.dip2px(4));
+//		flow.setVerticalSpacing(UIUtils.dip2px(4));
 		Random random = new Random();
 		for (int i = 0; i <data.size(); i ++){
 			TextView textView = new TextView(UIUtils.getContext());
