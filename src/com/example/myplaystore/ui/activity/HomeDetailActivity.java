@@ -5,6 +5,7 @@ import com.example.myplaystore.domain.AppInfo;
 import com.example.myplaystore.http.protocol.HomeDetailProtocol;
 import com.example.myplaystore.ui.holder.DetailAppInfoHolder;
 import com.example.myplaystore.ui.holder.DetailDesHolder;
+import com.example.myplaystore.ui.holder.DetailDownloadHolder;
 import com.example.myplaystore.ui.holder.DetailPicsHolder;
 import com.example.myplaystore.ui.holder.DetailSafeHolder;
 import com.example.myplaystore.ui.view.LoadingPager;
@@ -67,6 +68,11 @@ public class HomeDetailActivity extends BaseActivity {
 		DetailDesHolder desHolder = new DetailDesHolder();
 		fl_detail_des.addView(desHolder.getRootView());
 		desHolder.setData(data);
+		
+		FrameLayout fl_detail_download = (FrameLayout) view.findViewById(R.id.fl_detail_download);
+		DetailDownloadHolder detailDownloadHolder = new DetailDownloadHolder();
+		fl_detail_download.addView(detailDownloadHolder.getRootView());
+		detailDownloadHolder.setData(data);
 		
 		return view;
 	}

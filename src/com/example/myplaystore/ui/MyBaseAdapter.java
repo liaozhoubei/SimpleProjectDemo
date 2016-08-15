@@ -3,6 +3,7 @@ package com.example.myplaystore.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.myplaystore.manager.ThreadManager;
 import com.example.myplaystore.ui.holder.BaseHolder;
 import com.example.myplaystore.ui.holder.MoreHolder;
 import com.example.myplaystore.utils.UIUtils;
@@ -96,12 +97,41 @@ public abstract class MyBaseAdapter<T> extends BaseAdapter {
 	public void LoadMore(final MoreHolder moreholder) {
 		if (!isLoading) {
 			isLoading = true;
-			new Thread() {
-				
+//			new Thread() {
+//				
+//				
+//				@Override
+//				public void run() {
+//					super.run();
+//					final ArrayList<T> moredata = onLoadMore();
+//					UIUtils.runOnUIThread(new Runnable() {
+//						
+//						@Override
+//						public void run() {
+//							
+//							if (moredata != null) {
+//								if (moredata.size() < 20) {
+//									moreholder.setData(MoreHolder.STATE_MORE_NONE);
+//									Toast.makeText(UIUtils.getContext(), "没有更多数据了", Toast.LENGTH_SHORT).show();
+//								} else {
+//									moreholder.setData(MoreHolder.STATE_MORE_MORE);
+//								}
+//								data.addAll(moredata);
+//								MyBaseAdapter.this.notifyDataSetChanged();
+//								
+//							} else {
+//								moreholder.setData(MoreHolder.STATE_MORE_ERROR);
+//							}
+//							isLoading = false;
+//						}
+//					});
+//				}
+//			}.start();
+			
+			ThreadManager.getThreadPool().execute(new Runnable() {
 				
 				@Override
 				public void run() {
-					super.run();
 					final ArrayList<T> moredata = onLoadMore();
 					UIUtils.runOnUIThread(new Runnable() {
 						
@@ -123,9 +153,9 @@ public abstract class MyBaseAdapter<T> extends BaseAdapter {
 							}
 							isLoading = false;
 						}
-					});
+					});					
 				}
-			}.start();
+			});
 		}
 	}
 

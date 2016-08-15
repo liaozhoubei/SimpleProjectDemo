@@ -1,6 +1,7 @@
 package com.example.myplaystore.ui.view;
 
 import com.example.myplaystore.R;
+import com.example.myplaystore.manager.ThreadManager;
 import com.example.myplaystore.utils.UIUtils;
 
 import android.content.Context;
@@ -92,10 +93,28 @@ public abstract class LoadingPager extends FrameLayout {
 	}
 	
 	public void loadData(){
-		new Thread(){
+//		new Thread(){
+//			@Override
+//			public void run() {
+//				super.run();
+//				final ResultState resultState = onLoad();
+//				UIUtils.runOnUIThread(new Runnable() {
+//					
+//					@Override
+//					public void run() {
+//						if (resultState != null) {
+//							mCurrentState = resultState.getState();
+//							showRightPager();
+//						}
+//					}
+//				});
+//			}
+//		}.start();
+		
+		ThreadManager.getThreadPool().execute(new Runnable() {
+			
 			@Override
 			public void run() {
-				super.run();
 				final ResultState resultState = onLoad();
 				UIUtils.runOnUIThread(new Runnable() {
 					
@@ -104,11 +123,11 @@ public abstract class LoadingPager extends FrameLayout {
 						if (resultState != null) {
 							mCurrentState = resultState.getState();
 							showRightPager();
-						}
+						}						
 					}
 				});
 			}
-		}.start();
+		});
 	}
 
 	
