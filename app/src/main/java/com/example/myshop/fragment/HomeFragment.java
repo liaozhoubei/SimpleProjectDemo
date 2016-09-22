@@ -21,11 +21,14 @@ import com.example.myshop.R;
 import com.example.myshop.adapter.DividerItemDecortion;
 import com.example.myshop.adapter.HomeCatgoryAdapter;
 import com.example.myshop.bean.Banner;
+import com.example.myshop.bean.Campaign;
+import com.example.myshop.bean.HomeCampaign;
 import com.example.myshop.bean.HomeCategory;
 import com.example.myshop.http.BaseCallback;
 import com.example.myshop.http.OkHttpHelper;
 import com.example.myshop.http.SpotsCallBack;
 import com.example.myshop.utils.LogUtil;
+import com.example.myshop.widget.Contants;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -116,29 +119,74 @@ public class HomeFragment extends Fragment {
 
     private void initRecyclerView(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.home_recyclerview);
-        List<HomeCategory> datas = new ArrayList<>(15);
-        HomeCategory category = new HomeCategory("热门活动",R.drawable.img_big_1,R.drawable.img_1_small1,R.drawable.img_1_small2);
-        datas.add(category);
+//        List<HomeCategory> datas = new ArrayList<>(15);
+//        HomeCategory category = new HomeCategory("热门活动",R.drawable.img_big_1,R.drawable.img_1_small1,R.drawable.img_1_small2);
+//        datas.add(category);
+//
+//        category = new HomeCategory("有利可图",R.drawable.img_big_4,R.drawable.img_4_small1,R.drawable.img_4_small2);
+//        datas.add(category);
+//        category = new HomeCategory("品牌街",R.drawable.img_big_2,R.drawable.img_2_small1,R.drawable.img_2_small2);
+//        datas.add(category);
+//
+//        category = new HomeCategory("金融街 包赚翻",R.drawable.img_big_1,R.drawable.img_3_small1,R.drawable.imag_3_small2);
+//        datas.add(category);
+//
+//        category = new HomeCategory("超值购",R.drawable.img_big_0,R.drawable.img_0_small1,R.drawable.img_0_small2);
+//        datas.add(category);
+//        mHomeAdapter = new HomeCatgoryAdapter(datas);
+//        mRecyclerView.setHasFixedSize(true);
+//        // 设置RecyclerView的分割线
+//        mRecyclerView.addItemDecoration(new DividerItemDecortion());
+//        // 设置RecyclerView的布局方式，可以是LinearLayout/GraidLayout等
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
+//        mRecyclerView.setLayoutManager(layoutManager);
+//        mRecyclerView.setAdapter(mHomeAdapter);
+        mOkHttpHelper.get(Contants.API.CAMPAIGN_HOME, new BaseCallback<List<HomeCampaign>>() {
 
-        category = new HomeCategory("有利可图",R.drawable.img_big_4,R.drawable.img_4_small1,R.drawable.img_4_small2);
-        datas.add(category);
-        category = new HomeCategory("品牌街",R.drawable.img_big_2,R.drawable.img_2_small1,R.drawable.img_2_small2);
-        datas.add(category);
+            @Override
+            public void onBeforeRequest(Request request) {
 
-        category = new HomeCategory("金融街 包赚翻",R.drawable.img_big_1,R.drawable.img_3_small1,R.drawable.imag_3_small2);
-        datas.add(category);
+            }
 
-        category = new HomeCategory("超值购",R.drawable.img_big_0,R.drawable.img_0_small1,R.drawable.img_0_small2);
-        datas.add(category);
-        mHomeAdapter = new HomeCatgoryAdapter(datas);
-        mRecyclerView.setHasFixedSize(true);
+            @Override
+            public void onFailure(Request request, Exception e) {
+
+            }
+
+            @Override
+            public void onResponse(Response response) {
+
+            }
+
+            @Override
+            public void onSuccess(Response response, List<HomeCampaign> homeCampaigns) {
+                initData(homeCampaigns);
+            }
+
+            @Override
+            public void onError(Response response, int code, Exception e) {
+
+            }
+        });
+    }
+
+    private void initData(List<HomeCampaign> homeCampaigns){
+        mHomeAdapter = new HomeCatgoryAdapter(homeCampaigns, getContext());
+//        mRecyclerView.setHasFixedSize(true);
+
+        mHomeAdapter.setOnCampaignClickListener(new HomeCatgoryAdapter.OnCompaignClickListener() {
+            @Override
+            public void onClick(View view, Campaign campaign) {
+                Toast.makeText(getContext(), campaign.getTitle() + "点击了什么东西", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // 设置RecyclerView的分割线
         mRecyclerView.addItemDecoration(new DividerItemDecortion());
         // 设置RecyclerView的布局方式，可以是LinearLayout/GraidLayout等
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mHomeAdapter);
-
     }
 
     // 设置手机轮播图
