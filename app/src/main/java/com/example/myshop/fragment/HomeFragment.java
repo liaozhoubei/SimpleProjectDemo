@@ -20,11 +20,32 @@ import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.example.myshop.R;
 import com.example.myshop.adapter.DividerItemDecortion;
 import com.example.myshop.adapter.HomeCatgoryAdapter;
+import com.example.myshop.bean.Banner;
 import com.example.myshop.bean.HomeCategory;
+import com.example.myshop.http.BaseCallback;
+import com.example.myshop.http.OkHttpHelper;
+import com.example.myshop.http.SpotsCallBack;
 import com.example.myshop.utils.LogUtil;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okio.BufferedSink;
+
+import static android.R.string.ok;
+import static java.security.AccessController.getContext;
 
 
 /**
@@ -34,6 +55,9 @@ public class HomeFragment extends Fragment {
     private SliderLayout mSliderLayout;
     private PagerIndicator mIndicator;
     private RecyclerView mRecyclerView;
+    private Gson mGson = new Gson();
+    private List<Banner> mBanners;
+    private OkHttpHelper mOkHttpHelper = com.example.myshop.http.OkHttpHelper.getIntance();
 
     private static final String TAG = "HomeFragment";
     private HomeCatgoryAdapter mHomeAdapter;
@@ -45,9 +69,49 @@ public class HomeFragment extends Fragment {
         mSliderLayout = (SliderLayout) view.findViewById(R.id.slider);
 
         mIndicator = (PagerIndicator) view.findViewById(R.id.custom_indicator);
-        initSlider();
         initRecyclerView(view);
+        requestImage();
         return view;
+    }
+
+    private void requestImage(){
+        String url = "http://112.124.22.238:8081/course_api/banner/query?type=1";
+//        OkHttpClient httpClient = new OkHttpClient();
+//        //FormEncodingBuilder在okhttp3中已经被弃用
+////        FormEncodingBuilder builder = new FormEncodingBuilder().add("type", "1").build();
+//        RequestBody requestBody = new FormBody.Builder().add("type", "1").build();
+//        Request request = new Request.Builder().url(url).post(requestBody).build();
+//        httpClient.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                if (response.isSuccessful()) {
+//                    String str = response.body().string();
+//                    Type type = new TypeToken<List<Banner>>(){}.getType();
+//                    mBanners = mGson.fromJson(str, type);
+//                    initSlider();
+//                }
+//            }
+//        });
+        mOkHttpHelper.get(url, new SpotsCallBack<List<Banner>>(getContext()) {
+
+
+            @Override
+            public void onSuccess(Response response, List<Banner> banners) {
+                mBanners = banners;
+                initSlider();
+            }
+
+            @Override
+            public void onError(Response response, int code, Exception e) {
+
+            }
+        });
+
     }
 
     private void initRecyclerView(View view) {
@@ -67,53 +131,30 @@ public class HomeFragment extends Fragment {
         category = new HomeCategory("超值购",R.drawable.img_big_0,R.drawable.img_0_small1,R.drawable.img_0_small2);
         datas.add(category);
         mHomeAdapter = new HomeCatgoryAdapter(datas);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
+        mRecyclerView.setHasFixedSize(true);
+        // 设置RecyclerView的分割线
         mRecyclerView.addItemDecoration(new DividerItemDecortion());
+        // 设置RecyclerView的布局方式，可以是LinearLayout/GraidLayout等
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mHomeAdapter);
 
     }
 
+    // 设置手机轮播图
     private void initSlider() {
 
-        // 加载图片
-        TextSliderView textSliderView = new TextSliderView(this.getActivity());
-        textSliderView.image("http://m.360buyimg.com/mobilecms/s300x98_jfs/t2416/102/20949846/13425/a3027ebc/55e6d1b9Ne6fd6d8f.jpg");
-        textSliderView.description("新品推荐");
-        textSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
-            @Override
-            public void onSliderClick(BaseSliderView slider) {
-                Toast.makeText(HomeFragment.this.getActivity(),"新品推荐",Toast.LENGTH_LONG).show();
-            }
-        });
-
-        TextSliderView textSliderView2 = new TextSliderView(this.getActivity());
-        textSliderView2.image("http://m.360buyimg.com/mobilecms/s300x98_jfs/t1507/64/486775407/55927/d72d78cb/558d2fbaNb3c2f349.jpg");
-        textSliderView2.description("时尚男装");
-        textSliderView2.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
-            @Override
-            public void onSliderClick(BaseSliderView slider) {
-                Toast.makeText(HomeFragment.this.getActivity(),"时尚男装",Toast.LENGTH_LONG).show();
-            }
-        });
-
-        TextSliderView textSliderView3 = new TextSliderView(this.getActivity());
-        textSliderView3.image("http://m.360buyimg.com/mobilecms/s300x98_jfs/t1363/77/1381395719/60705/ce91ad5c/55dd271aN49efd216.jpg");
-        textSliderView3.description("家电秒杀");
-
-
-        textSliderView3.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
-            @Override
-            public void onSliderClick(BaseSliderView baseSliderView) {
-
-                Toast.makeText(HomeFragment.this.getActivity(),"家电秒杀",Toast.LENGTH_LONG).show();
+        if (mBanners != null) {
+            for (Banner banner: mBanners) {
+                TextSliderView textSliderView = new TextSliderView(this.getActivity());
+                textSliderView.image(banner.getImgUrl());
+                textSliderView.description(banner.getDescription());
+                // 设置图片视频屏幕
+                textSliderView.setScaleType(BaseSliderView.ScaleType.Fit);
+                mSliderLayout.addSlider(textSliderView);
 
             }
-        });
-
-        mSliderLayout.addSlider(textSliderView);
-        mSliderLayout.addSlider(textSliderView2);
-        mSliderLayout.addSlider(textSliderView3);
+        }
 
         // 设置指示器
         mSliderLayout.setCustomIndicator(mIndicator);
@@ -126,17 +167,17 @@ public class HomeFragment extends Fragment {
         mSliderLayout.addOnPageChangeListener(new ViewPagerEx.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                LogUtil.d(TAG, "onPageScrolled");
+//                LogUtil.d(TAG, "onPageScrolled");
             }
 
             @Override
             public void onPageSelected(int position) {
-                LogUtil.d(TAG,"onPageSelected");
+//                LogUtil.d(TAG,"onPageSelected");
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                LogUtil.d(TAG,"onPageScrollStateChanged");
+//                LogUtil.d(TAG,"onPageScrollStateChanged");
             }
         });
 
@@ -147,7 +188,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (mSliderLayout != null) {
+            mSliderLayout.stopAutoCycle();
+        }
 
-        mSliderLayout.stopAutoCycle();
     }
 }
