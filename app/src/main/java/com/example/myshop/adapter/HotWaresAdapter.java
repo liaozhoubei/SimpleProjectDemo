@@ -37,12 +37,44 @@ public class HotWaresAdapter extends RecyclerView.Adapter<HotWaresAdapter.HotWar
 
     @Override
     public void onBindViewHolder(HotWaresViewHolder holder, int position) {
-        Wares wares = mDatas.get(position);
+        Wares wares = getData(position);
 
         holder.draweeView.setImageURI(Uri.parse(wares.getImgUrl()));
         holder.textTitle.setText(wares.getName());
         holder.textPrice.setText("￥"+wares.getPrice());
     }
+
+    public Wares getData(int position){
+
+        return mDatas.get(position);
+    }
+
+
+    public List<Wares> getDatas(){
+
+        return  mDatas;
+    }
+    public void clearData(){
+
+        mDatas.clear();
+        notifyItemRangeRemoved(0,mDatas.size());
+    }
+
+    public void addData(List<Wares> datas){
+
+        addData(0,datas);
+    }
+
+    public void addData(int position,List<Wares> datas){
+
+        if(datas !=null && datas.size()>0) {
+
+            mDatas.addAll(datas);
+            notifyItemRangeChanged(position, mDatas.size());
+        }
+
+    }
+
 
     @Override
     public int getItemCount() {

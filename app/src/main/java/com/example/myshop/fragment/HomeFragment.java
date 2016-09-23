@@ -18,7 +18,8 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.example.myshop.R;
-import com.example.myshop.adapter.DividerItemDecortion;
+import com.example.myshop.adapter.CardViewtemDecortion;
+import com.example.myshop.adapter.DividerItemDecoration;
 import com.example.myshop.adapter.HomeCatgoryAdapter;
 import com.example.myshop.bean.Banner;
 import com.example.myshop.bean.Campaign;
@@ -182,7 +183,7 @@ public class HomeFragment extends Fragment {
         });
 
         // 设置RecyclerView的分割线
-        mRecyclerView.addItemDecoration(new DividerItemDecortion());
+        mRecyclerView.addItemDecoration(new CardViewtemDecortion());
         // 设置RecyclerView的布局方式，可以是LinearLayout/GraidLayout等
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
         mRecyclerView.setLayoutManager(layoutManager);

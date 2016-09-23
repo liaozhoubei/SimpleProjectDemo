@@ -7,10 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
- * Created by Bei on 2016/9/21.
+ * Created by Bei on 2016/9/23.
  */
 
-public class DividerItemDecortion extends RecyclerView.ItemDecoration {
+public class CardViewtemDecortion extends RecyclerView.ItemDecoration {
+
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDraw(c, parent, state);
@@ -23,23 +24,21 @@ public class DividerItemDecortion extends RecyclerView.ItemDecoration {
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+
         int layoutOrientation = getOrientation(parent);
         if (layoutOrientation == LinearLayoutManager.VERTICAL) {
             outRect.top = 10;
-            outRect.left = 5;
-            outRect.right = 5;
-        } else if (layoutOrientation == LinearLayoutManager.HORIZONTAL) {
+            outRect.left=5;
+            outRect.right=5;
+        } else if(layoutOrientation == LinearLayoutManager.HORIZONTAL) {
             outRect.left = 5;
         }
-
     }
 
-
-    private int getOrientation(RecyclerView parent){
+    private int getOrientation(RecyclerView parent) {
         if (parent.getLayoutManager() instanceof LinearLayoutManager) {
             LinearLayoutManager layoutManager = (LinearLayoutManager) parent.getLayoutManager();
-            return  layoutManager.getOrientation();
+            return layoutManager.getOrientation();
         } else throw new IllegalStateException("DividerItemDecoration can only be used with a LinearLayoutManager.");
     }
-
 }
