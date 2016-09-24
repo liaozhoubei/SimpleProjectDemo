@@ -1,7 +1,6 @@
 package com.example.myshop.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,13 +13,13 @@ import com.cjj.MaterialRefreshLayout;
 import com.cjj.MaterialRefreshListener;
 import com.example.myshop.R;
 import com.example.myshop.adapter.DividerItemDecoration;
-import com.example.myshop.adapter.HotWaresAdapter;
+import com.example.myshop.adapter.HWAdatper;
 import com.example.myshop.bean.Page;
 import com.example.myshop.bean.Wares;
 import com.example.myshop.http.OkHttpHelper;
 import com.example.myshop.http.SpotsCallBack;
 import com.example.myshop.utils.LogUtil;
-import com.example.myshop.widget.Contants;
+import com.example.myshop.Contants;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -28,13 +27,12 @@ import java.util.List;
 
 import okhttp3.Response;
 
-import static java.security.AccessController.getContext;
-
 /**
  * Created by Bei on 2016/9/21.
  */
 public class HotFragment extends Fragment {
 
+    private String TAG = HotFragment.class.getSimpleName();
     private OkHttpHelper mOkHttpHelper = OkHttpHelper.getIntance();
     private int currPage = 1;
     private int pageSize = 10;
@@ -45,7 +43,7 @@ public class HotFragment extends Fragment {
 
     private int state = STATE_NORMAL;
 
-    private HotWaresAdapter mHotWaresAdapter;
+    private HWAdatper mHotWaresAdapter;
     private List<Wares> datas;
 
     @ViewInject(R.id.recyclerview)
@@ -114,6 +112,7 @@ public class HotFragment extends Fragment {
                 currPage = waresPage.getCurrentPage();
                 totalPage = waresPage.getTotalPage();
 
+                LogUtil.d("TAG", "datas的数据不为空");
                 showData();
             }
 
@@ -129,15 +128,16 @@ public class HotFragment extends Fragment {
 
         switch (state) {
             case STATE_NORMAL:
-                mHotWaresAdapter = new HotWaresAdapter(datas);
+                mHotWaresAdapter = new HWAdatper(getContext(), datas);
                 mRecyclerView.setAdapter(mHotWaresAdapter);
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 mRecyclerView.setItemAnimator(new DefaultItemAnimator());
                 mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
+
                 break;
 
             case STATE_REFREH:
-                mHotWaresAdapter.clearData();
+                mHotWaresAdapter.clear();
                 mHotWaresAdapter.addData(datas);
 
                 mRecyclerView.scrollToPosition(0);
@@ -147,7 +147,6 @@ public class HotFragment extends Fragment {
                 mHotWaresAdapter.addData(mHotWaresAdapter.getDatas().size(),datas);
                 mRecyclerView.scrollToPosition(mHotWaresAdapter.getDatas().size());
                 mRefreshLaout.finishRefreshLoadMore();
-                LogUtil.d("HotFragment", "这里时时乐");
                 break;
         }
 

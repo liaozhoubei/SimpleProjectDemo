@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/selector_list_item"
     android:padding="5dp">
 
@@ -42,7 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/firebrick"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            />
 
         <Button
             style="@style/bigRedButton"
@@ -50,7 +53,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right|bottom"
             android:layout_marginTop="20dp"
-            android:text="立即购买" />
+            android:text="立即购买"
+            />
 
 
     </LinearLayout>

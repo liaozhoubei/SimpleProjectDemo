@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,37 +18,20 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.example.myshop.R;
 import com.example.myshop.adapter.CardViewtemDecortion;
-import com.example.myshop.adapter.DividerItemDecoration;
 import com.example.myshop.adapter.HomeCatgoryAdapter;
 import com.example.myshop.bean.Banner;
 import com.example.myshop.bean.Campaign;
 import com.example.myshop.bean.HomeCampaign;
-import com.example.myshop.bean.HomeCategory;
 import com.example.myshop.http.BaseCallback;
 import com.example.myshop.http.OkHttpHelper;
 import com.example.myshop.http.SpotsCallBack;
-import com.example.myshop.utils.LogUtil;
-import com.example.myshop.widget.Contants;
+import com.example.myshop.Contants;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
-import okio.BufferedSink;
-
-import static android.R.string.ok;
-import static java.security.AccessController.getContext;
 
 
 /**
