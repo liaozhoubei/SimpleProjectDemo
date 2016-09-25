@@ -13,7 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.example.myshop.Contants;
 import com.example.myshop.R;
 import com.example.myshop.adapter.BaseAdapter;
@@ -23,6 +28,7 @@ import com.example.myshop.adapter.DividerItemDecoration;
 import com.example.myshop.adapter.WaresAdapter;
 import com.example.myshop.bean.Banner;
 import com.example.myshop.bean.Category;
+import com.example.myshop.bean.HomeCampaign;
 import com.example.myshop.bean.Page;
 import com.example.myshop.bean.Wares;
 import com.example.myshop.http.BaseCallback;
@@ -80,29 +86,50 @@ public class CategoryFragment extends Fragment {
 
         requestCategoryData();
         requestBannerData();
-
-
         initRefreshLayout();
         return view;
     }
 
     private void initRefreshLayout() {
+        mRefreshLaout.setLoadMore(true);
+        mRefreshLaout.setMaterialRefreshListener(new MaterialRefreshListener() {
+            @Override
+            public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
+                refreshData();
+            }
+        });
     }
 
-    // 请求轮播图数据
-    private void requestBannerData() {
+    private void refreshData() {
+        currPage =1;
+
+        state=STATE_REFREH;
+        requestWares(category_id);
+
+    }
+
+    private void loadMoreData(){
+
+        currPage = ++currPage;
+        state = STATE_MORE;
+        requestWares(category_id);
+
     }
 
     /**
      * 从网络中获取分类商品数据
      */
     private void requestCategoryData() {
-        String url = Contants.API.BANNER + "?type=1";
+//        String url = Contants.API.BANNER + "?type=1";
+        String url = Contants.API.BASE_URL +"category/list";;
         mHttpHelper.get(url, new SpotsCallBack<List<Category>>(getContext()) {
 
             @Override
             public void onSuccess(Response response, List<Category> categories) {
                 showCategoryData(categories);
+                if(categories !=null && categories.size()>0)
+                    category_id = categories.get(0).getId();
+                requestWares(category_id);
             }
 
             @Override
@@ -113,12 +140,13 @@ public class CategoryFragment extends Fragment {
     }
 
     /**
-     * 将商品数据展示在页面中
+     * 将左侧商品类目展示在页面中
      *
      * @param categories 分类商品数据列表
      */
     private void showCategoryData(final List<Category> categories) {
         mCategoryAdapter = new CategoryAdapter(getContext(), categories);
+        // 点击类目时加载右侧商品信息
         mCategoryAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -134,6 +162,63 @@ public class CategoryFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL_LIST));
+    }
+
+    // 请求轮播图数据
+    private void requestBannerData() {
+        String url = Contants.API.BANNER + "?type=1";
+        mHttpHelper.get(url, new SpotsCallBack<List<Banner>>(getContext()) {
+
+
+            @Override
+            public void onSuccess(Response response, List<Banner> banners) {
+                ShowSliderView(banners);
+            }
+
+            @Override
+            public void onError(Response response, int code, Exception e) {
+
+            }
+        });
+    }
+
+    // 设置轮播图
+    private void ShowSliderView(List<Banner> banners) {
+
+        if (banners != null) {
+            for (Banner banner: banners) {
+                TextSliderView textSliderView = new TextSliderView(this.getActivity());
+                textSliderView.image(banner.getImgUrl());
+                textSliderView.description(banner.getDescription());
+                // 设置图片视频屏幕
+                textSliderView.setScaleType(BaseSliderView.ScaleType.Fit);
+                mSliderLayout.addSlider(textSliderView);
+
+            }
+        }
+
+        // 设置转场效果
+        mSliderLayout.setCustomAnimation(new DescriptionAnimation());
+        mSliderLayout.setPresetTransformer(SliderLayout.Transformer.RotateUp);
+        // 切换时间
+        mSliderLayout.setDuration(3000);
+
+        mSliderLayout.addOnPageChangeListener(new ViewPagerEx.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                LogUtil.d(TAG, "onPageScrolled");
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+//                LogUtil.d(TAG,"onPageSelected");
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+//                LogUtil.d(TAG,"onPageScrollStateChanged");
+            }
+        });
     }
 
     // 请求网络中相应页面的数据
@@ -172,7 +257,7 @@ public class CategoryFragment extends Fragment {
     }
 
     /**
-     * 展示页面商品数据
+     * 展示页面右侧商品数据
      *
      * @param wares
      */

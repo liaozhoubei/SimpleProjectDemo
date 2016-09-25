@@ -172,7 +172,7 @@ public class HomeFragment extends Fragment {
         mRecyclerView.setAdapter(mHomeAdapter);
     }
 
-    // 设置手机轮播图
+    // 设置手机首页轮播图
     private void initSlider() {
 
         if (mBanners != null) {
@@ -211,9 +211,6 @@ public class HomeFragment extends Fragment {
 //                LogUtil.d(TAG,"onPageScrollStateChanged");
             }
         });
-
-
-
     }
 
     @Override
