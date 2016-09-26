@@ -43,7 +43,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private Gson mGson = new Gson();
     private List<Banner> mBanners;
-    private OkHttpHelper mOkHttpHelper = com.example.myshop.http.OkHttpHelper.getIntance();
+    private OkHttpHelper mOkHttpHelper = com.example.myshop.http.OkHttpHelper.getInstance();
 
     private static final String TAG = "HomeFragment";
     private HomeCatgoryAdapter mHomeAdapter;

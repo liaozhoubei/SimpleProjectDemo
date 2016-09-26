@@ -7,7 +7,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,6 @@ import com.example.myshop.adapter.DividerItemDecoration;
 import com.example.myshop.adapter.WaresAdapter;
 import com.example.myshop.bean.Banner;
 import com.example.myshop.bean.Category;
-import com.example.myshop.bean.HomeCampaign;
 import com.example.myshop.bean.Page;
 import com.example.myshop.bean.Wares;
 import com.example.myshop.http.BaseCallback;
@@ -37,7 +35,6 @@ import com.example.myshop.http.SpotsCallBack;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Request;
@@ -64,7 +61,7 @@ public class CategoryFragment extends Fragment {
     private CategoryAdapter mCategoryAdapter;
     private WaresAdapter mWaresAdatper;
 
-    private OkHttpHelper mHttpHelper = OkHttpHelper.getIntance();
+    private OkHttpHelper mHttpHelper = OkHttpHelper.getInstance();
 
     private int currPage = 1;
     private int totalPage = 1;
@@ -270,7 +267,6 @@ public class CategoryFragment extends Fragment {
                     mWaresAdatper = new WaresAdapter(getContext(), wares);
 
                     mRecyclerviewWares.setAdapter(mWaresAdatper);
-
                     mRecyclerviewWares.setLayoutManager(new GridLayoutManager(getContext(), 2));
                     mRecyclerviewWares.setItemAnimator(new DefaultItemAnimator());
                     mRecyclerviewWares.addItemDecoration(new DividerGridItemDecoration(getContext()));

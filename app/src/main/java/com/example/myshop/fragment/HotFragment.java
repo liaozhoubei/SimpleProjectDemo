@@ -33,7 +33,7 @@ import okhttp3.Response;
 public class HotFragment extends Fragment {
 
     private String TAG = HotFragment.class.getSimpleName();
-    private OkHttpHelper mOkHttpHelper = OkHttpHelper.getIntance();
+    private OkHttpHelper mOkHttpHelper = OkHttpHelper.getInstance();
     private int currPage = 1;
     private int pageSize = 10;
     private int totalPage = 1;

@@ -50,7 +50,7 @@ public class OkHttpHelper {
 
     ;
 
-    public static OkHttpHelper getIntance() {
+    public static OkHttpHelper getInstance() {
         return mInstance;
     }
 

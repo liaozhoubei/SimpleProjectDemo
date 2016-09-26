@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * Created by Bei on 2016/9/23.
+ * 封装商品信息的bean类
  */
 
 public class Wares implements Serializable {
