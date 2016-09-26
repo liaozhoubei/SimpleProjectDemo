@@ -9,8 +9,7 @@ import java.io.Serializable;
 
 public class ShoppingCart extends Wares implements Serializable {
     private int count;
-    private boolean isChecked=true;
-
+    private boolean isChecked = true;
 
 
     public int getCount() {

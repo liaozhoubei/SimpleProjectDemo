@@ -20,6 +20,7 @@ import com.example.myshop.adapter.DividerItemDecoration;
 import com.example.myshop.bean.ShoppingCart;
 import com.example.myshop.http.OkHttpHelper;
 import com.example.myshop.utils.CartProvider;
+import com.example.myshop.utils.LogUtil;
 import com.example.myshop.widget.MyToolbar;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
@@ -66,6 +67,7 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
 
     @Override
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        LogUtil.d(TAG, TAG+ "初始化了");
         return  inflater.inflate(R.layout.fragment_cart,container,false);
     }
 

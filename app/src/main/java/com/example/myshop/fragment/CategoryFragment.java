@@ -32,6 +32,7 @@ import com.example.myshop.bean.Wares;
 import com.example.myshop.http.BaseCallback;
 import com.example.myshop.http.OkHttpHelper;
 import com.example.myshop.http.SpotsCallBack;
+import com.example.myshop.utils.LogUtil;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -45,6 +46,8 @@ import okhttp3.Response;
  * Create by Bei
  */
 public class CategoryFragment extends Fragment {
+
+    private final String TAG = CategoryFragment.class.getSimpleName();
 
     @ViewInject(R.id.recyclerview_category)
     private RecyclerView mRecyclerView;
@@ -78,6 +81,7 @@ public class CategoryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        LogUtil.d(TAG, TAG+ "初始化了");
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         ViewUtils.inject(this, view);
 
@@ -147,6 +151,7 @@ public class CategoryFragment extends Fragment {
         mCategoryAdapter.setOnItemClickListener(new BaseAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                LogUtil.d(TAG, TAG + "点击刷新商品");
                 Category category = mCategoryAdapter.getItem(position);
                 category_id = category.getId();
                 currPage = 1;
@@ -240,6 +245,7 @@ public class CategoryFragment extends Fragment {
 
             @Override
             public void onSuccess(Response response, Page<Wares> waresPage) {
+                LogUtil.d(TAG, TAG + "点击展示商品商品");
                 currPage = waresPage.getCurrentPage();
                 totalPage = waresPage.getTotalPage();
 
@@ -262,17 +268,18 @@ public class CategoryFragment extends Fragment {
         switch (state) {
 
             case STATE_NORMAL:
-                // 选择安装GridLayout或者LinearLayout方式展示布局
+                // 当mWaresAdatper为空的时候加载
                 if (mWaresAdatper == null) {
                     mWaresAdatper = new WaresAdapter(getContext(), wares);
 
-                    mRecyclerviewWares.setAdapter(mWaresAdatper);
-                    mRecyclerviewWares.setLayoutManager(new GridLayoutManager(getContext(), 2));
-                    mRecyclerviewWares.setItemAnimator(new DefaultItemAnimator());
-                    mRecyclerviewWares.addItemDecoration(new DividerGridItemDecoration(getContext()));
+                    ShowRecyclerViewWaresData();
                 } else {
+                    // 当mWaresAdatper不为空的时候重新加载
+                    // 若不重新价值会导致商品间隙变大，原因未知
                     mWaresAdatper.clear();
                     mWaresAdatper.addData(wares);
+
+                    ShowRecyclerViewWaresData();
                 }
                 break;
 
@@ -294,6 +301,14 @@ public class CategoryFragment extends Fragment {
 
 
         }
+    }
+
+    // RecyclerView将右侧商品数据展示出来
+    public void ShowRecyclerViewWaresData(){
+        mRecyclerviewWares.setAdapter(mWaresAdatper);
+        mRecyclerviewWares.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        mRecyclerviewWares.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerviewWares.addItemDecoration(new DividerGridItemDecoration(getContext()));
     }
 
 

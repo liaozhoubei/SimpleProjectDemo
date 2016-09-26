@@ -23,10 +23,6 @@ import java.util.List;
 public class CartAdapter extends SimpleAdapter<ShoppingCart> implements BaseAdapter.OnItemClickListener {
     public static final String TAG="CartAdapter";
 
-
-
-
-
     private CheckBox checkBox;
     private TextView textView;
 
