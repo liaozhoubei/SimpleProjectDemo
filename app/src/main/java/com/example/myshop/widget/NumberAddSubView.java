@@ -29,12 +29,7 @@ public class NumberAddSubView extends LinearLayout implements View.OnClickListen
     private Button mBtnSub;
 
     private OnButtonClickListener onButtonClickListener;
-
-
-
-
     private LayoutInflater mInflater;
-
 
     private  int value;
     private int minValue;
@@ -91,15 +86,11 @@ public class NumberAddSubView extends LinearLayout implements View.OnClickListen
 
     private void initView(){
 
-
-
         View view = mInflater.inflate(R.layout.widet_num_add_sub,this,true);
 
         mEtxtNum = (TextView) view.findViewById(R.id.etxt_num);
         mEtxtNum.setInputType(InputType.TYPE_NULL);
         mEtxtNum.setKeyListener(null);
-
-
 
         mBtnAdd = (Button) view.findViewById(R.id.btn_add);
         mBtnSub = (Button) view.findViewById(R.id.btn_sub);
@@ -132,9 +123,7 @@ public class NumberAddSubView extends LinearLayout implements View.OnClickListen
 
     private void numAdd(){
 
-
         getValue();
-
         if(this.value<=maxValue)
             this.value=+this.value+1;
 

@@ -2,8 +2,6 @@ package com.example.myshop.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,7 +11,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.example.myshop.CreateOrderActivity;
+import com.example.myshop.activity.CreateOrderActivity;
 import com.example.myshop.R;
 import com.example.myshop.adapter.CartAdapter;
 import com.example.myshop.adapter.DividerItemDecoration;
@@ -26,8 +24,6 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 
 import java.util.List;
-
-import static android.os.Build.VERSION_CODES.M;
 
 
 /**
@@ -80,13 +76,20 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         showData();
     }
 
-
+    /**
+     * 删除购物车中的商品
+     * @param view
+     */
     @OnClick(R.id.btn_del)
     public void delCart(View view){
 
         mAdapter.delCart();
     }
 
+    /**
+     * 下单购买按键
+     * @param view
+     */
     @OnClick(R.id.btn_order)
     public void toOrder(View view){
 
@@ -96,11 +99,10 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
     }
 
 
-
-
+    /**
+     * 在购物车中展示商品
+     */
     private void showData(){
-
-
         List<ShoppingCart> carts = cartProvider.getAll();
 
         mAdapter = new CartAdapter(getActivity(),carts,mCheckBox,mTextTotal);
@@ -115,19 +117,16 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
 
 
     public void refData(){
-
         mAdapter.clear();
         List<ShoppingCart> carts = cartProvider.getAll();
         mAdapter.addData(carts);
         mAdapter.showTotalPrice();
-
-
-
     }
 
 
-
-
+    /**
+     * 改变Toolbar的样式，隐藏搜索栏
+     */
     public void changeToolbar(){
 
         mToolbar.hideSearchView();
@@ -139,11 +138,11 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
         mToolbar.getRightButton().setOnClickListener(this);
 
         mToolbar.getRightButton().setTag(ACTION_EDIT);
-
-
     }
 
-
+    /**
+     * 点击右上角编辑完成之后，更改购物车为正常样式
+     */
     private void showDelControl(){
         mToolbar.getRightButton().setText("完成");
         mTextTotal.setVisibility(View.GONE);
@@ -156,6 +155,9 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
 
     }
 
+    /**
+     * 隐藏购物车删除控制的样式
+     */
     private void  hideDelControl(){
 
         mTextTotal.setVisibility(View.VISIBLE);
@@ -175,19 +177,12 @@ public class CartFragment extends BaseFragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-
-
-
         int action = (int) v.getTag();
         if(ACTION_EDIT == action){
-
             showDelControl();
         }
         else if(ACTION_CAMPLATE == action){
-
             hideDelControl();
         }
-
-
     }
 }

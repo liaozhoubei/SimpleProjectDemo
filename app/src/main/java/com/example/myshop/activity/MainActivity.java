@@ -1,4 +1,4 @@
-package com.example.myshop;
+package com.example.myshop.activity;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.example.myshop.R;
 import com.example.myshop.bean.Tab;
 import com.example.myshop.fragment.CartFragment;
 import com.example.myshop.fragment.CategoryFragment;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private LayoutInflater mInflater;
     private List<Tab> mTabs = new ArrayList<>(5);
     private MyToolbar myToolbar;
-    private Fragment cartFragment;
+    private CartFragment cartFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
         initTab();
     }
 
+    /**
+     * 初始化底部标签栏
+     */
     private void initTab() {
         Tab tab_home = new Tab(HomeFragment.class, R.string.home, R.drawable.selector_icon_home);
         Tab tab_hot = new Tab(HotFragment.class, R.string.hot, R.drawable.selector_icon_hot);
@@ -87,18 +91,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 标签切换到CartFragment的时候改变Toolbar样式
+     */
     private void refData() {
         if (cartFragment == null) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.cart));
-//            if (fragment != null) {
-//                cartFragment = fragment;
-//                cartFragment.refData();
-//                cartFragment.changeToolbar();
-//            }
-//        } else {
-//            cartFragment.refData();
-//            cartFragment.changeToolbar();
-//        }
+            if (fragment != null) {
+                cartFragment = (CartFragment) fragment;
+                cartFragment.refData();
+                cartFragment.changeToolbar();
+            }
+        } else {
+            cartFragment.refData();
+            cartFragment.changeToolbar();
         }
     }
 

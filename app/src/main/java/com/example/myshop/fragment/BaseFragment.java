@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.myshop.LoginActivity;
+import com.example.myshop.activity.LoginActivity;
 import com.example.myshop.MyApplication;
 import com.example.myshop.bean.User;
 import com.lidroid.xutils.ViewUtils;

@@ -102,8 +102,8 @@
         <item name="android:button">@drawable/selector_checkbox</item>
     </style>
 
-<!--    <style name="customTabLayout" parent="Widget.Design.TabLayout">
-        &lt;!&ndash;<item name="tabMaxWidth">@dimen/tab_max_width</item>&ndash;&gt;
+    <style name="customTabLayout" parent="Widget.Design.TabLayout">
+        <!--<item name="tabMaxWidth">@dimen/tab_max_width</item>-->
         <item name="tabIndicatorColor">#eb4f38</item>
         <item name="tabIndicatorHeight">2dp</item>
         <item name="tabPaddingStart">12dp</item>
@@ -116,7 +116,7 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/darkgrey</item>
         <item name="textAllCaps">true</item>
-    </style>-->
+    </style>
 
 
     <style name="ware_title">

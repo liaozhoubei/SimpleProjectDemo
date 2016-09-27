@@ -1,8 +1,10 @@
-package com.example.myshop;
+package com.example.myshop.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+
+import com.example.myshop.R;
 
 /**
  * Created by Bei on 2016/9/21.

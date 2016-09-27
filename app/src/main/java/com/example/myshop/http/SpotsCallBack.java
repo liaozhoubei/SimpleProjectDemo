@@ -10,6 +10,7 @@ import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 /**
  * Created by Bei on 2016/9/22.
+ * 对缓冲进度条的简单封装
  */
 
 public abstract class SpotsCallBack<T> extends BaseCallback<T> {

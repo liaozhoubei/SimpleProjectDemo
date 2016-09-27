@@ -18,10 +18,11 @@ import java.util.List;
 
 /**
  * Created by Bei on 2016/9/26.
+ * 购物车适配器
  */
 
 public class CartAdapter extends SimpleAdapter<ShoppingCart> implements BaseAdapter.OnItemClickListener {
-    public static final String TAG="CartAdapter";
+    public static final String TAG = "CartAdapter";
 
     private CheckBox checkBox;
     private TextView textView;
@@ -49,19 +50,20 @@ public class CartAdapter extends SimpleAdapter<ShoppingCart> implements BaseAdap
     protected void bindData(BaseViewHolder viewHoder, final ShoppingCart item) {
 
         viewHoder.getTextView(R.id.text_title).setText(item.getName());
-        viewHoder.getTextView(R.id.text_price).setText("￥"+item.getPrice());
+        viewHoder.getTextView(R.id.text_price).setText("￥" + item.getPrice());
         SimpleDraweeView draweeView = (SimpleDraweeView) viewHoder.getView(R.id.drawee_view);
         draweeView.setImageURI(Uri.parse(item.getImgUrl()));
 
         CheckBox checkBox = (CheckBox) viewHoder.getView(R.id.checkbox);
         checkBox.setChecked(item.isChecked());
 
-
+        // 自定义的数量增减视图
         NumberAddSubView numberAddSubView = (NumberAddSubView) viewHoder.getView(R.id.num_control);
 
         numberAddSubView.setValue(item.getCount());
 
         numberAddSubView.setOnButtonClickListener(new NumberAddSubView.OnButtonClickListener() {
+            // 当增加数量的时候
             @Override
             public void onButtonAddClick(View view, int value) {
 
@@ -72,6 +74,7 @@ public class CartAdapter extends SimpleAdapter<ShoppingCart> implements BaseAdap
 
             }
 
+            // 当减少数量的时候
             @Override
             public void onButtonSubClick(View view, int value) {
 
@@ -85,42 +88,50 @@ public class CartAdapter extends SimpleAdapter<ShoppingCart> implements BaseAdap
     }
 
 
-    private  float getTotalPrice(){
+    /**
+     * 获得购物车商品的总价
+     * @return  返回商品总价格
+     */
+    private float getTotalPrice() {
 
-        float sum=0;
-        if(!isNull())
+        float sum = 0;
+        if (!isNull())
             return sum;
 
-        for (ShoppingCart cart:
+        for (ShoppingCart cart :
                 datas) {
-            if(cart.isChecked())
-                sum += cart.getCount()*cart.getPrice();
+            if (cart.isChecked())
+                sum += cart.getCount() * cart.getPrice();
         }
 
         return sum;
     }
 
 
-
-    public void showTotalPrice(){
+    /**
+     * 展示购物车商品的价格
+     */
+    public void showTotalPrice() {
 
         float total = getTotalPrice();
-
+        // 使用HTML将价格颜色改变
         textView.setText(Html.fromHtml("合计 ￥<span style='color:#eb4f38'>" + total + "</span>"), TextView.BufferType.SPANNABLE);
     }
 
 
-
-    private boolean isNull(){
-
-        return (datas !=null && datas.size()>0);
+    /**
+     * 判断购物车是否
+     * @return
+     */
+    private boolean isNull() {
+        return (datas != null && datas.size() > 0);
     }
 
 
     @Override
     public void onItemClick(View view, int position) {
 
-        ShoppingCart cart =  getItem(position);
+        ShoppingCart cart = getItem(position);
         cart.setIsChecked(!cart.isChecked());
         notifyItemChanged(position);
 
@@ -129,7 +140,9 @@ public class CartAdapter extends SimpleAdapter<ShoppingCart> implements BaseAdap
 
     }
 
-
+    /**
+     * 监听购物车商品的选中事件
+     */
     private void checkListen() {
         int count = 0;
         int checkNum = 0;
@@ -152,12 +165,15 @@ public class CartAdapter extends SimpleAdapter<ShoppingCart> implements BaseAdap
         }
     }
 
-
-    public void checkAll_None(boolean isChecked){
-        if(!isNull())
-            return ;
-        int i=0;
-        for (ShoppingCart cart :datas){
+    /**
+     *  选择购物车下发 全选 checkbox之后，所有购物车设置为全选或者全不选中
+     * @param isChecked 商品是否被选中，true为选择，false为不选中
+     */
+    public void checkAll_None(boolean isChecked) {
+        if (!isNull())
+            return;
+        int i = 0;
+        for (ShoppingCart cart : datas) {
             cart.setIsChecked(isChecked);
             notifyItemChanged(i);
             i++;
@@ -165,11 +181,12 @@ public class CartAdapter extends SimpleAdapter<ShoppingCart> implements BaseAdap
     }
 
 
+    // 删除购物车中的信息
+    public void delCart() {
+        if (!isNull())
+            return;
 
-    public void delCart(){
-        if(!isNull())
-            return ;
-
+//      此方法会报错
 //        for (ShoppingCart cart : datas){
 //
 //            if(cart.isChecked()){
@@ -180,10 +197,10 @@ public class CartAdapter extends SimpleAdapter<ShoppingCart> implements BaseAdap
 //            }
 //        }
 
-        for(Iterator iterator = datas.iterator(); iterator.hasNext();){
+        for (Iterator iterator = datas.iterator(); iterator.hasNext(); ) {
 
             ShoppingCart cart = (ShoppingCart) iterator.next();
-            if(cart.isChecked()){
+            if (cart.isChecked()) {
                 int position = datas.indexOf(cart);
                 cartProvider.delete(cart);
                 iterator.remove();
@@ -195,14 +212,12 @@ public class CartAdapter extends SimpleAdapter<ShoppingCart> implements BaseAdap
     }
 
 
-
-
-
-    public void setTextView(TextView textview){
+    public void setTextView(TextView textview) {
         this.textView = textview;
     }
 
-    public void setCheckBox(CheckBox ck){
+    // 如果
+    public void setCheckBox(CheckBox ck) {
         this.checkBox = ck;
 
         checkBox.setOnClickListener(new View.OnClickListener() {

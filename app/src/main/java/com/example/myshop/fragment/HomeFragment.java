@@ -1,5 +1,6 @@
 package com.example.myshop.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
@@ -17,6 +17,7 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.example.myshop.R;
+import com.example.myshop.activity.WareListActivity;
 import com.example.myshop.adapter.CardViewtemDecortion;
 import com.example.myshop.adapter.HomeCatgoryAdapter;
 import com.example.myshop.bean.Banner;
@@ -160,7 +161,9 @@ public class HomeFragment extends Fragment {
         mHomeAdapter.setOnCampaignClickListener(new HomeCatgoryAdapter.OnCompaignClickListener() {
             @Override
             public void onClick(View view, Campaign campaign) {
-                Toast.makeText(getContext(), campaign.getTitle() + "点击了什么东西", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), WareListActivity.class);
+                intent.putExtra(Contants.COMPAINGAIN_ID, campaign.getId());
+                startActivity(intent);
             }
         });
 

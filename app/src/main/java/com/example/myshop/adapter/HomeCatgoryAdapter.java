@@ -1,5 +1,8 @@
 package com.example.myshop.adapter;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -123,20 +126,31 @@ public class HomeCatgoryAdapter extends RecyclerView.Adapter<HomeCatgoryAdapter.
         @Override
         public void onClick(View view) {
             if (onCampaignClickListener != null){
-                switch (view.getId()){
-                    case R.id.imgview_big:
-                        onCampaignClickListener.onClick(view, homeCampaign.getCpOne());
-                        break;
-                    case R.id.imgview_small_top:
-                        onCampaignClickListener.onClick(view, homeCampaign.getCpTwo());
-                        break;
-                    case R.id.imgview_small_bottom:
-                        onCampaignClickListener.onClick(view, homeCampaign.getCpThree());
-                        break;
-                    default:
-                        break;
-                }
+              anim(view);
             }
+        }
+
+        public void anim(final View view){
+            ObjectAnimator animator = ObjectAnimator.ofFloat(view, "rotationX", 0.0f, 360.0f)
+                    .setDuration(200);
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationStart(Animator animator) {
+                    HomeCampaign comCampaign =mList.get(getLayoutPosition());
+                    switch (view.getId()) {
+                        case R.id.imgview_big:
+                            onCampaignClickListener.onClick(view, comCampaign.getCpOne());
+                            break;
+                        case R.id.imgview_small_top:
+                            onCampaignClickListener.onClick(view, comCampaign.getCpTwo());
+                            break;
+                        case R.id.imgview_small_bottom:
+                            onCampaignClickListener.onClick(view, comCampaign.getCpThree());
+                    }
+                }
+
+            });
+            animator.start();
         }
     }
 

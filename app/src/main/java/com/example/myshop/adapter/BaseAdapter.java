@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.example.myshop.utils.LogUtil;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
@@ -27,20 +28,16 @@ public abstract class BaseAdapter<T, H extends BaseViewHolder> extends RecyclerV
 
     protected final Context context;
 
-    protected final int layoutResId;
+    protected int layoutResId;
 
     protected List<T> datas;
 
 
     private OnItemClickListener mOnItemClickListener = null;
 
-
-
     public  interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
-
-
 
     public BaseAdapter(Context context, int layoutResId) {
         this(context, layoutResId, null);
@@ -52,9 +49,6 @@ public abstract class BaseAdapter<T, H extends BaseViewHolder> extends RecyclerV
         this.context = context;
         this.layoutResId = layoutResId;
     }
-
-
-
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup viewGroup,  int viewType) {
@@ -68,8 +62,6 @@ public abstract class BaseAdapter<T, H extends BaseViewHolder> extends RecyclerV
         T item = getItem(position);
         bindData((H)viewHoder, item);
     }
-
-
 
     @Override
     public int getItemCount() {
@@ -87,9 +79,30 @@ public abstract class BaseAdapter<T, H extends BaseViewHolder> extends RecyclerV
 
 
     public void clear(){
-        int itemCount = datas.size();
-        datas.clear();
-        this.notifyItemRangeRemoved(0,itemCount);
+//        int itemCount = datas.size();
+//        datas.clear();
+//        this.notifyItemRangeRemoved(0,itemCount);
+        if(datas==null || datas.size()<=0)
+            return;
+
+        for (Iterator it = datas.iterator(); it.hasNext();){
+
+            T t = (T) it.next();
+            int position = datas.indexOf(t);
+            it.remove();
+            notifyItemRemoved(position);
+        }
+    }
+
+    /**
+     * 从列表中删除某项
+     * @param t
+     */
+    public  void removeItem(T t){
+
+        int position = datas.indexOf(t);
+        datas.remove(position);
+        notifyItemRemoved(position);
     }
 
     public List<T> getDatas(){
@@ -103,13 +116,42 @@ public abstract class BaseAdapter<T, H extends BaseViewHolder> extends RecyclerV
 
     public void addData(int position,List<T> datas){
         if(datas !=null && datas.size()>0) {
-
-            this.datas.addAll(datas);
-            this.notifyItemRangeChanged(position, datas.size());
+            for (T t : datas) {
+                this.datas.add(position, t);
+                notifyItemInserted(position);
+            }
         }
     }
 
+    public void refreshData(List<T> list){
 
+        clear();
+        if(list !=null && list.size()>0){
+
+
+            int size = list.size();
+            for (int i=0;i<size;i++){
+                datas.add(i,list.get(i));
+                notifyItemInserted(i);
+            }
+
+        }
+    }
+
+    public void loadMoreData(List<T> list){
+
+        if(list !=null && list.size()>0){
+
+            int size = list.size();
+            int begin = datas.size();
+            for (int i=0;i<size;i++){
+                datas.add(list.get(i));
+                notifyItemInserted(i+begin);
+            }
+
+        }
+
+    }
 
 
     /**
