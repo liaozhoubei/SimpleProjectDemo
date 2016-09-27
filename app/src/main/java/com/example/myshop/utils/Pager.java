@@ -162,6 +162,7 @@ public class Pager {
 
     /**
      * 生成页面所需的URL字符串
+     *
      * @return
      */
     private String buildUrlParams() {
@@ -316,6 +317,7 @@ public class Pager {
 
     /**
      * 页面监听接口
+     *
      * @param <T>
      */
     public interface OnPageListener<T> {

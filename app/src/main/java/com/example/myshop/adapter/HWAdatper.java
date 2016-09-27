@@ -60,4 +60,13 @@ public class HWAdatper extends SimpleAdapter<Wares> {
         cart.setPrice(item.getPrice());
         return cart;
     }
+
+    /**
+     * 重新设置页面布局
+     * @param layoutId 布局视图id
+     */
+    public void  resetLayout(int layoutId){
+        this.layoutResId  = layoutId;
+        notifyItemRangeChanged(0,getDatas().size());
+    }
 }

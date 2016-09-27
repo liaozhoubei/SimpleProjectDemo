@@ -165,10 +165,6 @@ public class MyToolbar extends Toolbar {
             showTitleView();
         }
 
-
-
-
-
     }
 
 
