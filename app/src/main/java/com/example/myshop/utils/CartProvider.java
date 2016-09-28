@@ -46,6 +46,7 @@ public class CartProvider {
         commit();
     }
 
+    // 添加货物到购物车
     public void  put(Wares wares) {
         ShoppingCart cart = convertData(wares);
         put(cart);

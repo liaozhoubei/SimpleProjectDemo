@@ -51,16 +51,6 @@ public class HWAdatper extends SimpleAdapter<Wares> {
         }
     }
 
-    public ShoppingCart convertData(Wares item) {
-        ShoppingCart cart = new ShoppingCart();
-        cart.setId(item.getId());
-        cart.setDescription(item.getDescription());
-        cart.setImgUrl(item.getImgUrl());
-        cart.setName(item.getName());
-        cart.setPrice(item.getPrice());
-        return cart;
-    }
-
     /**
      * 重新设置页面布局
      * @param layoutId 布局视图id

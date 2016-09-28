@@ -12,6 +12,7 @@
         android:layout_alignParentTop="true"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
+        app:isShowSearchView="false"
         app:rightButtonText="编辑"
         app:title="购物车"/>
 

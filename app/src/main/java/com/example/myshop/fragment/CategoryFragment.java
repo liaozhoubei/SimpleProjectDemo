@@ -137,6 +137,7 @@ public class CategoryFragment extends Fragment {
             public void onError(Response response, int code, Exception e) {
 
             }
+
         });
     }
 
@@ -181,6 +182,7 @@ public class CategoryFragment extends Fragment {
             public void onError(Response response, int code, Exception e) {
 
             }
+
         });
     }
 
@@ -254,6 +256,11 @@ public class CategoryFragment extends Fragment {
 
             @Override
             public void onError(Response response, int code, Exception e) {
+
+            }
+
+            @Override
+            public void onTokenError(Response response, int code) {
 
             }
         });

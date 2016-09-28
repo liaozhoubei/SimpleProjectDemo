@@ -8,6 +8,7 @@ import com.example.myshop.bean.User;
 
 /**
  * Created by Bei on 2016/9/26.
+ * 存取登陆信息到SharePreferences中的工具类
  */
 
 public class UserLocalData {

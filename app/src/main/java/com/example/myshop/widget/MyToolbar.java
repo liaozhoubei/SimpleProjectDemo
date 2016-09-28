@@ -33,7 +33,7 @@ public class MyToolbar extends Toolbar {
 
 
     public MyToolbar(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public MyToolbar(Context context, AttributeSet attrs) {
@@ -44,14 +44,11 @@ public class MyToolbar extends Toolbar {
         super(context, attrs, defStyleAttr);
 
 
-
         initView();
-        setContentInsetsRelative(10,10);
+        setContentInsetsRelative(10, 10);
 
 
-
-
-        if(attrs !=null) {
+        if (attrs != null) {
             final TintTypedArray a = TintTypedArray.obtainStyledAttributes(getContext(), attrs,
                     R.styleable.MyToolbar, defStyleAttr, 0);
 
@@ -63,22 +60,18 @@ public class MyToolbar extends Toolbar {
             }
 
 
-            boolean isShowSearchView = a.getBoolean(R.styleable.MyToolbar_isShowSearchView,false);
+            boolean isShowSearchView = a.getBoolean(R.styleable.MyToolbar_isShowSearchView, false);
 
-            if(isShowSearchView){
-
+            if (isShowSearchView) {
                 showSearchView();
                 hideTitleView();
-
             }
-
 
 
             CharSequence rightButtonText = a.getText(R.styleable.MyToolbar_rightButtonText);
-            if(rightButtonText !=null){
+            if (rightButtonText != null) {
                 setRightButtonText(rightButtonText);
             }
-
 
 
             a.recycle();
@@ -88,8 +81,7 @@ public class MyToolbar extends Toolbar {
 
     private void initView() {
 
-
-        if(mView == null) {
+        if (mView == null) {
 
             mInflater = LayoutInflater.from(getContext());
             mView = mInflater.inflate(R.layout.toolbar, null);
@@ -106,14 +98,13 @@ public class MyToolbar extends Toolbar {
         }
 
 
-
     }
 
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public void  setRightButtonIcon(Drawable icon){
+    public void setRightButtonIcon(Drawable icon) {
 
-        if(mRightButton !=null){
+        if (mRightButton != null) {
 
             mRightButton.setBackground(icon);
             mRightButton.setVisibility(VISIBLE);
@@ -121,33 +112,31 @@ public class MyToolbar extends Toolbar {
 
     }
 
-    public void  setRightButtonIcon(int icon){
+    public void setRightButtonIcon(int icon) {
 
         setRightButtonIcon(getResources().getDrawable(icon));
     }
 
 
-    public  void setRightButtonOnClickListener(OnClickListener li){
+    public void setRightButtonOnClickListener(OnClickListener li) {
 
         mRightButton.setOnClickListener(li);
     }
 
-    public void setRightButtonText(CharSequence text){
+    public void setRightButtonText(CharSequence text) {
         mRightButton.setText(text);
         mRightButton.setVisibility(VISIBLE);
     }
 
-    public void setRightButtonText(int id){
+    public void setRightButtonText(int id) {
         setRightButtonText(getResources().getString(id));
     }
 
 
-
-    public Button getRightButton(){
+    public Button getRightButton() {
 
         return this.mRightButton;
     }
-
 
 
     @Override
@@ -160,7 +149,7 @@ public class MyToolbar extends Toolbar {
     public void setTitle(CharSequence title) {
 
         initView();
-        if(mTextTitle !=null) {
+        if (mTextTitle != null) {
             mTextTitle.setText(title);
             showTitleView();
         }
@@ -168,22 +157,19 @@ public class MyToolbar extends Toolbar {
     }
 
 
+    public void showSearchView() {
 
-    public  void showSearchView(){
-
-        if(mSearchView !=null)
+        if (mSearchView != null)
             mSearchView.setVisibility(VISIBLE);
-
     }
 
-
-    public void hideSearchView(){
-        if(mSearchView !=null)
+    public void hideSearchView() {
+        if (mSearchView != null)
             mSearchView.setVisibility(GONE);
     }
 
-    public void showTitleView(){
-        if(mTextTitle !=null)
+    public void showTitleView() {
+        if (mTextTitle != null)
             mTextTitle.setVisibility(VISIBLE);
     }
 

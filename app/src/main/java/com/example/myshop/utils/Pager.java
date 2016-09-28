@@ -268,7 +268,6 @@ public class Pager {
 
 
     class RequestCallBack<T> extends SpotsCallBack<Page<T>> {
-
         public RequestCallBack(Context context) {
             super(context);
             super.mType = builder.mType;
@@ -312,6 +311,7 @@ public class Pager {
                 builder.mRefreshLayout.finishRefreshLoadMore();
             }
         }
+
     }
 
 

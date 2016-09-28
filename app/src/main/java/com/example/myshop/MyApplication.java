@@ -16,12 +16,12 @@ public class MyApplication extends Application {
 
     private User user;
 
-    private static  MyApplication mInstance;
+    private static MyApplication mInstance;
 
 
-    public static  MyApplication getInstance(){
+    public static MyApplication getInstance() {
 
-        return  mInstance;
+        return mInstance;
     }
 
     @Override
@@ -34,25 +34,25 @@ public class MyApplication extends Application {
     }
 
 
-    private void initUser(){
+    private void initUser() {
 
         this.user = UserLocalData.getUser(this);
     }
 
-    public User getUser(){
+    public User getUser() {
 
         return user;
     }
 
 
-    public void putUser(User user,String token){
+    public void putUser(User user, String token) {
         this.user = user;
-        UserLocalData.putUser(this,user);
-        UserLocalData.putToken(this,token);
+        UserLocalData.putUser(this, user);
+        UserLocalData.putToken(this, token);
     }
 
-    public void clearUser(){
-        this.user =null;
+    public void clearUser() {
+        this.user = null;
         UserLocalData.clearUser(this);
         UserLocalData.clearToken(this);
 
@@ -60,15 +60,15 @@ public class MyApplication extends Application {
     }
 
 
-    public String getToken(){
+    public String getToken() {
 
-        return  UserLocalData.getToken(this);
+        return UserLocalData.getToken(this);
     }
 
 
-
     private Intent intent;
-    public void putIntent(Intent intent){
+
+    public void putIntent(Intent intent) {
         this.intent = intent;
     }
 
@@ -76,9 +76,9 @@ public class MyApplication extends Application {
         return this.intent;
     }
 
-    public void jumpToTargetActivity(Context context){
+    public void jumpToTargetActivity(Context context) {
 
         context.startActivity(intent);
-        this.intent =null;
+        this.intent = null;
     }
 }
