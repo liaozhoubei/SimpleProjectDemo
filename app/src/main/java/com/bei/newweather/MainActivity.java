@@ -1,22 +1,12 @@
 package com.bei.newweather;
 
-import android.support.v4.app.Fragment;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.container, new PlaceholderFragment()).commit();
+            fragmentTransaction.add(R.id.container, new ForecastFragment()).commit();
         }
     }
 
@@ -47,42 +37,11 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        private ArrayAdapter<String> mForecastAdater;
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            // Create some dummy data for the ListView.  Here's a sample weekly forecast
-            String[] data = {
-                    "Mon 6/23 - Sunny - 31/17",
-                    "Tue 6/24 - Foggy - 21/8",
-                    "Wed 6/25 - Cloudy - 22/17",
-                    "Thurs 6/26 - Rainy - 18/11",
-                    "Fri 6/27 - Foggy - 21/10",
-                    "Sat 6/28 - TRAPPED IN WEATHERSTATION - 23/18",
-                    "Sun 6/29 - Sunny - 20/7"
-            };
-            List<String> weekForecast = new ArrayList<>(Arrays.asList(data));
-            mForecastAdater = new ArrayAdapter<String>(getActivity(), R.layout.list_item_forecast,
-                    R.id.list_item_forecast_textView, weekForecast);
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
-            listView.setAdapter(mForecastAdater);
-            return rootView;
-        }
-    }
 }
