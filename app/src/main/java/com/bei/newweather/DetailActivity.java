@@ -87,6 +87,7 @@ public class DetailActivity extends AppCompatActivity {
             }
         }
 
+        // share the message use default shareProvider
         private Intent createShareForecastIntent() {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
