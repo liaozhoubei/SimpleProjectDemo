@@ -1,4 +1,4 @@
-package com.bei.newweather;
+package com.bei.newweather.Utils;
 
 import junit.framework.Assert;
 
