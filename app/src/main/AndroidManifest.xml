@@ -22,6 +22,9 @@
             android:label="@string/title_activity_detail"
             android:theme="@style/AppTheme"></activity>
         <activity android:name=".SettingsActivity"/>
+        <provider
+            android:authorities="com.bei.newweather.app"
+            android:name="com.bei.newweather.data.WeatherProvider"/>
     </application>
 
 </manifest>
