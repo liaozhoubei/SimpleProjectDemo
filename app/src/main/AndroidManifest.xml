@@ -24,7 +24,10 @@
         <activity android:name=".SettingsActivity"/>
         <provider
             android:authorities="com.bei.newweather.app"
-            android:name="com.bei.newweather.data.WeatherProvider"/>
+            android:name="com.bei.newweather.data.WeatherProvider"
+            android:enabled="true"
+            android:exported="true"
+            />
     </application>
 
 </manifest>
