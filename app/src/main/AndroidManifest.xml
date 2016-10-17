@@ -3,6 +3,13 @@
           package="com.bei.newweather">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Permissions required by the sync adapter -->
+    <uses-permission
+        android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission
+        android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission
+        android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
 
     <application
         android:allowBackup="true"
@@ -38,14 +45,38 @@
 
         <provider
             android:name="com.bei.newweather.data.WeatherProvider"
-            android:authorities="com.bei.newweather.app"
+            android:authorities="@string/content_authority"
             android:enabled="true"
-            android:exported="true"
+            android:exported="false"
+            android:syncable="true"
             />
 
-        <service android:name=".service.SunshineService"/>
-        <receiver android:name=".service.SunshineService$AlarmReceiver"
-            android:enabled="true"/>
+        <!--<service android:name=".service.SunshineService"/>-->
+        <!--<receiver-->
+            <!--android:name=".service.SunshineService$AlarmReceiver"-->
+            <!--android:enabled="true"/>-->
+
+        <service
+            android:name=".sync.SunshineAuthenticatorService">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator"/>
+        </service>
+
+        <service android:name=".sync.SunshineSyncService">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter"/>
+
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter"
+                />
+
+        </service>
 
     </application>
 
