@@ -7,6 +7,8 @@ import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.text.format.Time;
 
+import com.bei.newweather.sync.SunshineSyncAdapter;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -254,7 +256,7 @@ public class Utility {
      * Returns true if the network is available or about to become available.
      *
      * @param context Context used to get the ConnectivityManager
-     * @return
+     * @return  true if the network is available
      */
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -262,4 +264,26 @@ public class Utility {
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
+       /**
+         *
+         * @param context Context used to get the SharedPreferences
+         * @return the location status integer type
+         */
+    @SuppressWarnings("ResourceType")
+    public static  @SunshineSyncAdapter.LocationStatus
+    int getLocationStatus(Context context){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        return sp.getInt(context.getString(R.string.pref_location_status_key), SunshineSyncAdapter.LOCATION_STATUS_UNKNOWN);
+    }
+
+    /**
+     * Resets the location status.  (Sets it to SunshineSyncAdapter.LOCATION_STATUS_UNKNOWN)
+     * @param c Context used to get the SharedPreferences
+     */
+    static public void resetLocationStatus(Context c){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putInt(c.getString(R.string.pref_location_status_key), SunshineSyncAdapter.LOCATION_STATUS_UNKNOWN);
+        spe.apply();
+    }
 }

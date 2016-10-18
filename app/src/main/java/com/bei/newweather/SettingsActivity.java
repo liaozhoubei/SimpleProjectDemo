@@ -2,6 +2,7 @@ package com.bei.newweather;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -9,11 +10,14 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
+import com.bei.newweather.data.WeatherContract;
+import com.bei.newweather.sync.SunshineSyncAdapter;
+
 /**
  * Created by Bei on 2016/10/12.
  */
 
-public class SettingsActivity extends PreferenceActivity implements Preference.OnPreferenceChangeListener{
+public class SettingsActivity extends PreferenceActivity implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,22 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         // updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_units_key)));
+    }
+
+    // Registers a shared preference change listener that gets notified when preferences change
+    @Override
+    protected void onResume() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp.registerOnSharedPreferenceChangeListener(this);
+        super.onResume();
+    }
+
+    // Unregisters a shared preference change listener
+    @Override
+    protected void onPause() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp.unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
     }
 
     /**
@@ -44,9 +64,9 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
                         .getString(preference.getKey(), ""));
     }
 
-    @Override
-    public boolean onPreferenceChange(Preference preference, Object value) {
+    private void setPreferenceSummary(Preference preference, Object value) {
         String stringValue = value.toString();
+        String key = preference.getKey();
 
         if (preference instanceof ListPreference) {
             // For list preferences, look up the correct display value in
@@ -60,7 +80,28 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
             // For other preferences, set the summary to the value's simple string representation.
             preference.setSummary(stringValue);
         }
+    }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object value) {
+        setPreferenceSummary(preference, value);
         return true;
+    }
+
+    // This gets called after the preference is changed, which is important because we
+    // start our synchronization here
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_location_key))) {
+            // we've changed the location
+            // first clear locationStatus
+            Utility.resetLocationStatus(this);
+            SunshineSyncAdapter.syncImmediately(this);
+        } else if (key.equals(getString(R.string.pref_units_key))) {
+            // units have changed. update lists of weather entries accordingly
+            getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
+
+        }
     }
 
     // get main activity instance when add new Loaction instead of creating a new main activity
@@ -69,4 +110,5 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
     public Intent getParentActivityIntent() {
         return super.getParentActivityIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
+
 }
