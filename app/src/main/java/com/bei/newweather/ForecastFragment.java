@@ -1,5 +1,6 @@
 package com.bei.newweather;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.bei.newweather.data.WeatherContract;
 import com.bei.newweather.sync.SunshineSyncAdapter;
@@ -23,6 +26,9 @@ import com.bei.newweather.sync.SunshineSyncAdapter;
  * A placeholder fragment containing a simple view.
  */
 public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    public static final String LOG_TAG = ForecastFragment.class.getSimpleName();
+
     private ForecastAdapter mForecastAdapter;
 
     private ListView mListView;
@@ -101,6 +107,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             updateWeather();
             return true;
         }
+        if (id == R.id.action_map) {
+            openPreferredLocationInMap();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -116,6 +126,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         // Get a reference to the ListView, and attach this adapter to it.
         mListView = (ListView) rootView.findViewById(R.id.listview_forecast);
+        View emptyView = rootView.findViewById(R.id.listview_forecast_empty);
+        mListView.setEmptyView(emptyView);
         mListView.setAdapter(mForecastAdapter);
         // We'll call our MainActivity
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -182,6 +194,25 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     }
 
+    private void openPreferredLocationInMap(){
+        if (null != mForecastAdapter) {
+            Cursor c = mForecastAdapter.getCursor();
+            if (null != c) {
+                c.moveToPosition(0);
+                String posLat = c.getString(COL_COORD_LAT);
+                String posLong = c.getString(COL_COORD_LONG);
+                Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(geoLocation);
+                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(intent);
+                } else {
+                    Log.d(LOG_TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
+                }
+            }
+        }
+    }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         // When tablets rotate, the currently selected list item needs to be saved.
@@ -224,6 +255,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             // to, do so now.
             mListView.smoothScrollToPosition(mPosition);
         }
+        updateEmptyView();
     }
 
     @Override
@@ -235,6 +267,23 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         mUseTodayLayout = useTodayLayout;
         if (mForecastAdapter != null) {
             mForecastAdapter.setUseTodayLayout(mUseTodayLayout);
+        }
+    }
+
+        /*
+        Updates the empty list view with contextually relevant information that the user can
+        use to determine why they aren't seeing weather.
+     */
+    private void updateEmptyView(){
+        if (mForecastAdapter.getCount() == 0) {
+            TextView tv = (TextView) getView().findViewById(R.id.listview_forecast_empty);
+            if (null != tv) {
+                int message = R.string.empty_forecast_list;
+                if (!Utility.isNetworkAvailable(getActivity()) ) {
+                    message = R.string.empty_forecast_list_no_network;
+                }
+                tv.setText(message);
+            }
         }
     }
 }

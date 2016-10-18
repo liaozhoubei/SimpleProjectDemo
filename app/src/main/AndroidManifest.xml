@@ -11,6 +11,9 @@
     <uses-permission
         android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
 
+    <uses-permission
+        android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -53,8 +56,8 @@
 
         <!--<service android:name=".service.SunshineService"/>-->
         <!--<receiver-->
-            <!--android:name=".service.SunshineService$AlarmReceiver"-->
-            <!--android:enabled="true"/>-->
+        <!--android:name=".service.SunshineService$AlarmReceiver"-->
+        <!--android:enabled="true"/>-->
 
         <service
             android:name=".sync.SunshineAuthenticatorService">
