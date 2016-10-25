@@ -30,7 +30,6 @@ import com.bei.newweather.sync.SunshineSyncAdapter;
 public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String LOG_TAG = ForecastFragment.class.getSimpleName();
-
     private ForecastAdapter mForecastAdapter;
 
     private ListView mListView;
@@ -71,8 +70,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     static final int COL_WEATHER_CONDITION_ID = 6;
     static final int COL_COORD_LAT = 7;
     static final int COL_COORD_LONG = 8;
-
-
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -121,14 +118,15 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_refresh) {
-            updateWeather();
-            return true;
-        }
+//        if (id == R.id.action_refresh) {
+//            updateWeather();
+//            return true;
+//        }
         if (id == R.id.action_map) {
             openPreferredLocationInMap();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -190,44 +188,31 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     // since we read the location when we create the loader, all we need to do is restart things
     void onLocationChanged( ) {
-        updateWeather();
         getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
     }
 
-    private void updateWeather() {
-
-//        Intent alarmIntent = new Intent(getActivity(), SunshineService.AlarmReceiver.class);
-//        alarmIntent.putExtra(SunshineService.LOCATION_QUERY_EXTRA, Utility.getPreferredLocation(getActivity()));
-//
-//        //Wrap in a pending intent which only fires once.
-//        PendingIntent pi = PendingIntent.getBroadcast(getActivity(), 0,alarmIntent,PendingIntent.FLAG_ONE_SHOT);//getBroadcast(context, 0, i, 0);
-//
-//        AlarmManager am=(AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
-//
-//        //Set the AlarmManager to wake up the system.
-//        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pi);
-
-        SunshineSyncAdapter.syncImmediately(getContext());
-
-
-    }
-
-    private void openPreferredLocationInMap(){
-        if (null != mForecastAdapter) {
+    private void openPreferredLocationInMap() {
+        // Using the URI scheme for showing a location found on a map.  This super-handy
+        // intent can is detailed in the "Common Intents" page of Android's developer site:
+        // http://developer.android.com/guide/components/intents-common.html#Maps
+        if ( null != mForecastAdapter ) {
             Cursor c = mForecastAdapter.getCursor();
-            if (null != c) {
+            if ( null != c ) {
                 c.moveToPosition(0);
                 String posLat = c.getString(COL_COORD_LAT);
                 String posLong = c.getString(COL_COORD_LONG);
                 Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
+
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(geoLocation);
+
                 if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(intent);
                 } else {
                     Log.d(LOG_TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
                 }
             }
+
         }
     }
 
@@ -288,14 +273,15 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         }
     }
 
-        /*
+    /*
         Updates the empty list view with contextually relevant information that the user can
         use to determine why they aren't seeing weather.
      */
-    private void updateEmptyView(){
-        if (mForecastAdapter.getCount() == 0) {
+    private void updateEmptyView() {
+        if ( mForecastAdapter.getCount() == 0 ) {
             TextView tv = (TextView) getView().findViewById(R.id.listview_forecast_empty);
-            if (null != tv) {
+            if ( null != tv ) {
+                // if cursor is empty, why? do we have an invalid location
                 int message = R.string.empty_forecast_list;
                 @SunshineSyncAdapter.LocationStatus int location = Utility.getLocationStatus(getActivity());
                 switch (location) {
@@ -313,7 +299,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                             message = R.string.empty_forecast_list_no_network;
                         }
                 }
-
                 tv.setText(message);
             }
         }
@@ -321,8 +306,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(R.string.pref_location_key))) {
+        if ( key.equals(getString(R.string.pref_location_status_key)) ) {
             updateEmptyView();
         }
     }
+
 }
