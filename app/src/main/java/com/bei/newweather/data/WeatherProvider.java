@@ -24,6 +24,7 @@ public class WeatherProvider extends ContentProvider {
     static final int WEATHER_WITH_LOCATION_AND_DATE = 102;
     static final int LOCATION = 300;
 
+
     private static final SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder;
 
     static{
