@@ -26,6 +26,7 @@ import com.bei.newweather.sync.SunshineSyncAdapter;
 
 /**
  * A placeholder fragment containing a simple view.
+ * 一个简单的天气预报主视图fragment
  */
 public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -41,6 +42,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private static final int FORECAST_LOADER = 0;
     // For the forecast view we're showing only a small subset of the stored data.
     // Specify the columns we need.
+    // 显示我们需要的一些天气预报信息
     private static final String[] FORECAST_COLUMNS = {
             // In this case the id needs to be fully qualified with a table name, since
             // the content provider joins the location & weather tables in the background
@@ -48,6 +50,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             // On the one hand, that's annoying.  On the other, you can search the weather table
             // using the location set by the user, which is only in the Location table.
             // So the convenience is worth it.
+            // id需要使用表名完全限定，因为内容提供者加入了后台的位置和天气表（两者都有一个_id列
+            // 此时，可通过用户设置的地理位置查询保存在表中的天气信息
             WeatherContract.WeatherEntry.TABLE_NAME + "." + WeatherContract.WeatherEntry._ID,
             WeatherContract.WeatherEntry.COLUMN_DATE,
             WeatherContract.WeatherEntry.COLUMN_SHORT_DESC,
@@ -61,6 +65,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
     // must change.
+    // 这些标记与天气预报的列相关，如果天气预报列改变，它们也跟着改变
     static final int COL_WEATHER_ID = 0;
     static final int COL_WEATHER_DATE = 1;
     static final int COL_WEATHER_DESC = 2;
