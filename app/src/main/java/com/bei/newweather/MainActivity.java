@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.bei.newweather.data.WeatherContract;
 import com.bei.newweather.sync.SunshineSyncAdapter;
 
 public class MainActivity extends AppCompatActivity implements ForecastFragment.Callback {
@@ -25,10 +26,11 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mLocation = Utility.getPreferredLocation(this);
+        Uri contentUri = getIntent() != null ? getIntent().getData() : null;
 
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -41,6 +43,12 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             // adding or replacing the detail fragment using a
             // fragment transaction.
             if (savedInstanceState == null) {
+                DetailFragment fragment = new DetailFragment();
+                if (contentUri != null) {
+                    Bundle args = new Bundle();
+                    args.putParcelable(DetailFragment.DETAIL_URI, contentUri);
+                    fragment.setArguments(args);
+                }
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
                         .commit();
@@ -50,9 +58,13 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             //getSupportActionBar().setElevation(0f);
         }
 
-        ForecastFragment forecastFragment =  ((ForecastFragment)getSupportFragmentManager()
+        ForecastFragment forecastFragment = ((ForecastFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_forecast));
         forecastFragment.setUseTodayLayout(!mTwoPane);
+        if (contentUri != null) {
+            forecastFragment.setInitialSelectedDate(
+                    WeatherContract.WeatherEntry.getDateFromUri(contentUri));
+        }
 
         SunshineSyncAdapter.initializeSyncAdapter(this);
     }
@@ -82,19 +94,18 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
     }
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
-        String location = Utility.getPreferredLocation( this );
+        String location = Utility.getPreferredLocation(this);
         // update the location in our second pane using the fragment manager
         if (location != null && !location.equals(mLocation)) {
-            ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
-            if ( null != ff ) {
+            ForecastFragment ff = (ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
+            if (null != ff) {
                 ff.onLocationChanged();
             }
-            DetailFragment df = (DetailFragment)getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
-            if ( null != df ) {
+            DetailFragment df = (DetailFragment) getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
+            if (null != df) {
                 df.onLocationChanged(location);
             }
             mLocation = location;
@@ -102,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
     }
 
     @Override
-   public void onItemSelected(Uri contentUri, ForecastAdapter.ForecastAdapterViewHolder vh) {
+    public void onItemSelected(Uri contentUri, ForecastAdapter.ForecastAdapterViewHolder vh) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
@@ -119,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         } else {
             Intent intent = new Intent(this, DetailActivity.class)
                     .setData(contentUri);
-             ActivityOptionsCompat activityOptions =
+            ActivityOptionsCompat activityOptions =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(this,
                             new Pair<View, String>(vh.mIconView, getString(R.string.detail_icon_transition_name)));
             ActivityCompat.startActivity(this, intent, activityOptions.toBundle());

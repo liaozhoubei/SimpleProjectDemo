@@ -33,6 +33,7 @@ import com.bei.newweather.MainActivity;
 import com.bei.newweather.R;
 import com.bei.newweather.Utility;
 import com.bei.newweather.data.WeatherContract;
+import com.bei.newweather.muzei.WeatherMuzeiSource;
 import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
@@ -56,7 +57,8 @@ import java.util.concurrent.ExecutionException;
 
 public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     public final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
-
+    public static final String ACTION_DATA_UPDATED =
+            "com.bei.newweather.app.ACTION_DATA_UPDATED";
     // Interval at which to sync with the weather, in seconds.
     // 60 seconds (1 minute) * 180 = 3 hours
     public static final int SYNC_INTERVAL = 60 * 180;
@@ -345,6 +347,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                         WeatherContract.WeatherEntry.COLUMN_DATE + " <= ?",
                         new String[]{Long.toString(dayTime.setJulianDay(julianStartDay - 1))});
 
+                updateWidgets();
+                updateMuzei();
                 notifyWeather();
             }
 
@@ -355,7 +359,24 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             e.printStackTrace();
             setLocationStatus(getContext(), LOCATION_STATUS_SERVER_INVALID);
         }
+    }
 
+    private void updateWidgets() {
+        Context context = getContext();
+        // Setting the package ensures that only components in our app will receive the broadcast
+        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
+                .setPackage(context.getPackageName());
+        context.sendBroadcast(dataUpdatedIntent);
+    }
+
+    private void updateMuzei() {
+        // Muzei is only compatible with Jelly Bean MR1+ devices, so there's no need to update the
+        // Muzei background on lower API level devices
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            Context context = getContext();
+            context.startService(new Intent(ACTION_DATA_UPDATED)
+                    .setClass(context, WeatherMuzeiSource.class));
+        }
     }
 
     private void notifyWeather() {

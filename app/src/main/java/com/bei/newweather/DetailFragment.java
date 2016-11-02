@@ -171,9 +171,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     null
             );
         }
-                ViewParent vp = getView().getParent();
-        if ( vp instanceof CardView ) {
-            ((View)vp).setVisibility(View.INVISIBLE);
+        ViewParent vp = getView().getParent();
+        if (vp instanceof CardView) {
+            ((View) vp).setVisibility(View.INVISIBLE);
         }
         return null;
     }
@@ -181,9 +181,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
-                    ViewParent vp = getView().getParent();
-            if ( vp instanceof CardView) {
-                ((View)vp).setVisibility(View.VISIBLE);
+            ViewParent vp = getView().getParent();
+            if (vp instanceof CardView) {
+                ((View) vp).setVisibility(View.VISIBLE);
             }
             // Read weather condition ID from cursor
             // 从cursor中读取weather condition ID
