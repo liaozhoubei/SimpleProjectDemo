@@ -3,7 +3,6 @@ package com.bei.newweather.sync;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 
 /**
  * Created by Bei on 2016/10/18.
@@ -15,10 +14,14 @@ public class SunshineAuthenticatorService extends Service{
 
     @Override
     public void onCreate() {
+    // Create a new authenticator object
         mAuthenticator = new SunshineAuthenticator(this);
     }
 
-    @Nullable
+    /*
+     * When the system binds to this Service to make the RPC call
+     * return the authenticator's IBinder.
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return mAuthenticator.getIBinder();

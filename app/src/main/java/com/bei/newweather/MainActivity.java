@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         Uri contentUri = getIntent() != null ? getIntent().getData() : null;
 
         setContentView(R.layout.activity_main);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -50,12 +49,12 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                     fragment.setArguments(args);
                 }
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
+                        .replace(R.id.weather_detail_container, fragment, DETAILFRAGMENT_TAG)
                         .commit();
             }
         } else {
             mTwoPane = false;
-            //getSupportActionBar().setElevation(0f);
+            getSupportActionBar().setElevation(0f);
         }
 
         ForecastFragment forecastFragment = ((ForecastFragment) getSupportFragmentManager()
