@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="custom_red">#f00</color>
+    <color name="custom_gray">#cccccc</color>
+    <color name="custom_white">#fff</color>
+    
+</resources>
