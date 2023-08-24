@@ -1,2 +1,2 @@
 # NewWeather
-一款简单的天气app
+简易的网络新闻客户端Demo

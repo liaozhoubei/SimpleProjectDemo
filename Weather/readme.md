@@ -1,0 +1,1 @@
+一个简单的天气demo，使用Gson解析获取到的json数据，并将数据存入数据库中，然后用contentProvider读取出来（此自存自取纯属练习）
